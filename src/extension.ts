@@ -1,6 +1,5 @@
-import { spawn } from 'child_process'
-import { platform } from 'os'
-import { join } from 'path'
+import { spawn } from 'child_process';
+import { join } from 'path';
 
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
@@ -14,18 +13,84 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "extension" is now active!');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World!');
-	});
+	// Blank command used to activate the extension through the command palette
+	let disposable = vscode.commands.registerCommand('extension.activateSpeak', () => {
+	});	
 
 	context.subscriptions.push(disposable);
+	//context.subscriptions.push(debugDisposable);
+	new SpeechListener(context);
+}
+
+
+class SpeechListener {
+	private execFile: any;
+	private child: any;
+
+
+	constructor(context: vscode.ExtensionContext) {
+		this.execFile = spawn;
+		this.run();
+	}
+
+	run() {
+		console.debug('In run method');
+		this.child = this.execFile('python', [join(__dirname, 'tts.py')]).on('error', (error: any) => print(error));
+		this.child.stdout.on('data',
+			(data: Buffer) => {
+
+				//print(data);
+				let commandRunner = new CommandRunner();
+				commandRunner.runCommand(data.toString());
+			});
+
+		this.child.stderr.on('data', (data: any) => print(data));
+	}
+}
+
+
+class CommandRunner {
+	runCommand(command: string) {
+		print(command);
+		let activeTextEditor;
+		let commandWords = command.split(' ');
+		switch (commandWords[0]) {
+			case 'navigate_line':
+				let lineNumber = parseInt(commandWords[1]);
+				activeTextEditor = vscode.window.activeTextEditor;
+				if (activeTextEditor) {
+					const range = activeTextEditor.document.lineAt(lineNumber - 1).range;
+					activeTextEditor.selection = new vscode.Selection(range.start, range.start);
+					activeTextEditor.revealRange(range);
+				}
+				break;
+			case 'copy':
+				activeTextEditor = vscode.window.activeTextEditor;
+				if (activeTextEditor) {
+					const text = activeTextEditor.document.getText(activeTextEditor.selection);
+					vscode.env.clipboard.writeText(text);
+				}
+				break;
+			case 'navigate_class':
+				let className = commandWords[1];
+				// TODO: implement functionality
+				break;
+			case 'run_file':
+				if (activeTextEditor) {
+					// TODO: implement functionality
+					//activeTextEditor.document.save;
+				}
+			case 'fallback':
+				break;
+
+		}
+	}
+}
+
+// helper method for printing to console
+function print(data: any) {
+	console.log('Vspeak Debug: ' + data.toString());
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }

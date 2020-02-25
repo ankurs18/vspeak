@@ -116,7 +116,7 @@ def listen_print_loop(responses):
         
         # If the previous result was longer than this one, we need to print
         # some extra spaces to overwrite the previous result
-        overwrite_chars = ' ' * (num_chars_printed - len(transcript))
+        #overwrite_chars = ' ' * (num_chars_printed - len(transcript))
 
         # if not result.is_final:
         #     # sys.stdout.write(transcript + overwrite_chars + '\r')
@@ -130,21 +130,6 @@ def listen_print_loop(responses):
         if result.is_final:
             processTranscript(transcript)
 
-            # sys.stdout.flush()
-            # print(transcript)
-            ################
-            #sys.stdout.write(transcript + '\n')
-            #print(transcript.strip() + overwrite_chars)
-            
-            #processTranscript(transcript)
-            # Exit recognition if any of the transcribed phrases could be
-            # one of our keywords.
-            # if re.search(r'\b(exit|quit)\b', transcript, re.I):
-            #     print('Exiting..')
-            #     break
-
-            # num_chars_printed = 0
-
 def processTranscript(transcript):
     sys.stdout.flush()
     if 'go' in transcript:        
@@ -157,7 +142,19 @@ def processTranscript(transcript):
         if 'class' in transcript:
             transcriptWords = transcript.split()
             if len(transcriptWords) > 2:
-                print('navigate_class', transcriptWords[len(transcriptWords)-1])
+                print('navigate_class', transcriptWords[len(transcriptWords)-1])    
+            else:
+                print('fallback')
+        if 'file' in transcript:
+            transcriptWords = transcript.split()
+            if len(transcriptWords) > 2:
+                print('navigate_file', transcriptWords[len(transcriptWords)-1])    
+            else:
+                print('fallback')
+        if 'copy' in transcript:
+            transcriptWords = transcript.split()
+            if len(transcriptWords)==1:
+                print('copy')
             else:
                 print('fallback')
     else:
