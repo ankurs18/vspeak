@@ -9,16 +9,13 @@ import * as vscode from 'vscode';
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "extension" is now active!');
 
-	// Blank command used to activate the extension through the command palette
+	// Temporary blank command used to activate the extension through the command palette
 	let disposable = vscode.commands.registerCommand('extension.activateSpeak', () => {
-	});	
+	});
 
 	context.subscriptions.push(disposable);
-	//context.subscriptions.push(debugDisposable);
 	new SpeechListener(context);
 }
 
@@ -34,14 +31,14 @@ class SpeechListener {
 	}
 
 	run() {
-		console.debug('In run method');
+		print('Trying to run speech detection');
 		this.child = this.execFile('python', [join(__dirname, 'tts.py')]).on('error', (error: any) => print(error));
 		this.child.stdout.on('data',
 			(data: Buffer) => {
 
 				//print(data);
 				let commandRunner = new CommandRunner();
-				commandRunner.runCommand(data.toString());
+				commandRunner.runCommand(data.toString().trim());
 			});
 
 		this.child.stderr.on('data', (data: any) => print(data));
@@ -50,40 +47,71 @@ class SpeechListener {
 
 
 class CommandRunner {
-	runCommand(command: string) {
-		print(command);
+	runCommand(receivedString: string) {
+		print('Command received: ' + receivedString);
 		let activeTextEditor;
-		let commandWords = command.split(' ');
-		switch (commandWords[0]) {
-			case 'navigate_line':
-				let lineNumber = parseInt(commandWords[1]);
-				activeTextEditor = vscode.window.activeTextEditor;
-				if (activeTextEditor) {
-					const range = activeTextEditor.document.lineAt(lineNumber - 1).range;
-					activeTextEditor.selection = new vscode.Selection(range.start, range.start);
-					activeTextEditor.revealRange(range);
-				}
-				break;
-			case 'copy':
-				activeTextEditor = vscode.window.activeTextEditor;
-				if (activeTextEditor) {
-					const text = activeTextEditor.document.getText(activeTextEditor.selection);
-					vscode.env.clipboard.writeText(text);
-				}
-				break;
-			case 'navigate_class':
-				let className = commandWords[1];
-				// TODO: implement functionality
-				break;
-			case 'run_file':
-				if (activeTextEditor) {
+		const words = receivedString.split(' ');
+		const status = words[0] === 'success';
+		if (status) {
+			const commandWords = words.slice(1);
+			switch (commandWords[0]) {
+				case 'navigate_line':
+					const lineNumber = parseInt(commandWords[1]);
+					activeTextEditor = vscode.window.activeTextEditor;
+					if (activeTextEditor) {
+						const range = activeTextEditor.document.lineAt(lineNumber - 1).range;
+						activeTextEditor.selection = new vscode.Selection(range.start, range.start);
+						activeTextEditor.revealRange(range);
+					}
+					break;
+				case 'navigate_definition':
+					vscode.commands.executeCommand('editor.action.revealDefinition');
+					break;
+				case 'copy':
+					activeTextEditor = vscode.window.activeTextEditor;
+					if (activeTextEditor) {
+						const text = activeTextEditor.document.getText(activeTextEditor.selection);
+						vscode.env.clipboard.writeText(text);
+					}
+					break;
+
+				case 'format_document':
+					vscode.commands.executeCommand('editor.action.formatDocument');
+					break;
+				case 'format_selection':
+					vscode.commands.executeCommand('editor.action.formatSelection');
+					break;
+				case 'navigate_terminal':
+					vscode.commands.executeCommand('workbench.action.terminal.focus');
+					break;
+				case 'open_terminal':
+					vscode.commands.executeCommand('workbench.action.terminal.new');
+					break;
+				case 'navigate_class':
+					let className = commandWords[1];
 					// TODO: implement functionality
-					//activeTextEditor.document.save;
-				}
-			case 'fallback':
-				break;
+					break;
+				case 'run_file':
+					activeTextEditor = vscode.window.activeTextEditor;
+					if (activeTextEditor) {
+						activeTextEditor.document.save(); //should probably save all files
+						const currentFileName = activeTextEditor.document.fileName;
+						const activeTerminal = vscode.window.activeTerminal;
+						if (activeTerminal) {
+							// TODO: implement functionality for other languages
+							activeTerminal.sendText('python ' + currentFileName);
+						}
+					}
+
+				case 'copy_file':
+					// TODO: implement functionality
+					break;
+
+
+			}
 
 		}
+
 	}
 }
 

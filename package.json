@@ -17,16 +17,8 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello world"
-			},
-			{
 				"command": "extension.activateSpeak",
 				"title": "Activate VSpeak"
-			},
-			{
-				"command": "extension.debug",
-				"title": "Debug"
 			}
 		]
 	},

@@ -18,6 +18,7 @@ CHUNK = int(RATE / 10)  # 100ms
 
 class MicrophoneStream(object):
     """Opens a recording stream as a generator yielding the audio chunks."""
+
     def __init__(self, rate, chunk):
         self._rate = rate
         self._chunk = chunk
@@ -32,8 +33,10 @@ class MicrophoneStream(object):
             format=pyaudio.paInt16,
             # The API currently only supports 1-channel (mono) audio
             # https://goo.gl/z757pE
-            channels=1, rate=self._rate,
-            input=True, frames_per_buffer=self._chunk,
+            channels=1,
+            rate=self._rate,
+            input=True,
+            frames_per_buffer=self._chunk,
             # Run the audio stream asynchronously to fill the buffer object.
             # This is necessary so that the input device's buffer doesn't
             # overflow while the calling thread makes network requests, etc.
@@ -78,7 +81,7 @@ class MicrophoneStream(object):
                 except queue.Empty:
                     break
 
-            yield b''.join(data)
+            yield b"".join(data)
 
 
 def listen_print_loop(responses):
@@ -96,7 +99,6 @@ def listen_print_loop(responses):
     the next result to overwrite it, until the response is a final one. For the
     final one, print a newline to preserve the finalized transcription.
     """
-    num_chars_printed = 0
     for response in responses:
         if not response.results:
             continue
@@ -111,76 +113,157 @@ def listen_print_loop(responses):
         # Display the transcription of the top alternative.
         transcript = result.alternatives[0].transcript
 
-        # Display interim results, but with a carriage return at the end of the
-        # line, so subsequent lines will overwrite them.
-        
-        # If the previous result was longer than this one, we need to print
-        # some extra spaces to overwrite the previous result
-        #overwrite_chars = ' ' * (num_chars_printed - len(transcript))
-
-        # if not result.is_final:
-        #     # sys.stdout.write(transcript + overwrite_chars + '\r')
-        #     # sys.stdout.flush()
-
-        #     # num_chars_printed = len(transcript)
-        #     pass
-
-        # else:
-
         if result.is_final:
             processTranscript(transcript)
 
+
 def processTranscript(transcript):
     sys.stdout.flush()
-    if 'go' in transcript:        
-        if 'line' in transcript:
-            numbers = [int(s) for s in transcript.split() if s.isdigit()]
-            if len(numbers) == 1:
-                print('navigate_line', numbers[0])
+    transcriptWords = transcript.split()
+    transcriptWordsCount = len(transcriptWords)
+    if "go" in transcriptWords:
+        if transcriptWordsCount > 1:
+            if "line" in transcriptWords:
+                # case: commands may be: go to line x, go to line number x, go
+                numbers = [int(s) for s in transcript.split() if s.isdigit()]
+                if len(numbers) == 1:
+                    print("success", "navigate_line", numbers[0])
+                else:
+                    # case: if the transcript contains two different numbers, it may be noise or the user error
+                    # or it does not have any number; we can't execute navigate_line command in either case
+                    print("fallback")
+            elif "definition" in transcriptWords:
+                if transcriptWordsCount < 5:
+                    excludedWords = set(transcriptWords) - {
+                        "go",
+                        "to",
+                        "definition",
+                        "class",
+                        "function",
+                        "variable",
+                        "symbol",
+                    }
+                    if len(excludedWords) > 0:
+                        # commands: go (to) (class/function/variable/symbol) definition
+                        print("success", "navigate_definition")
+                    else:
+                        # case: likely noise or false positive
+                        print("fallback")
+                else:
+                    # case: likely noise or false positive
+                    print("fallback")
+            elif "class" in transcriptWords:
+                if transcriptWordsCount > 2:
+                    # command: 'go (to) file fileName' (assuming implicitly that the last word will be the fileName)
+                    print(
+                        "success",
+                        "navigate_class",
+                        transcriptWords[transcriptWordsCount - 1],
+                    )
+                else:
+                    print("fallback")
+            elif "terminal" in transcriptWords and transcriptWordsCount < 4:
+                print("navigate_terminal")
+            elif "file" in transcriptWords:
+                if transcriptWordsCount > 2:
+                    # command: 'go (to) file fileName' (assuming implicitly that the last word will be the fileName)
+                    print(
+                        "success",
+                        "navigate_file",
+                        transcriptWords[transcriptWordsCount - 1],
+                    )
+                else:
+                    print("fallback")
             else:
-                print('fallback')
-        if 'class' in transcript:
-            transcriptWords = transcript.split()
-            if len(transcriptWords) > 2:
-                print('navigate_class', transcriptWords[len(transcriptWords)-1])    
+                print("fallback")
+        else:
+            # case: 'go' by itself has no meaning, we need another argument to gather where do we need to navigate
+            print("fallback")
+    elif "copy" in transcript:
+        if transcriptWordsCount == 1:
+            # commands: copy
+            print("success", "copy")
+        elif "file" in transcriptWords < 4 and (
+            len(set(transcriptWords) - {"copy", "current", "this"})
+        ):
+            # case: commands: copy (current/this) file
+            print("success", "copy_file")
+        else:
+            # case: the user may want to copy something else which we don't support yet or the detected 'copy' phrase may be noise
+            print("fallback")
+    elif "format" in transcriptWords:
+        if transcriptWordsCount == 1:
+            # commands: format
+            print("success", "format_document")
+        else:
+            if "selection" in transcriptWords or "selected" in transcriptWords:
+                # commands: format selected text, format selected, format selection
+                print("success", "format_selection")
+            elif transcriptWordsCount == 2 and (
+                "text" in transcriptWords or "document" in transcriptWords
+            ):
+                # commands: format text or format document
+                print("success", "format_document")
             else:
-                print('fallback')
-        if 'file' in transcript:
-            transcriptWords = transcript.split()
-            if len(transcriptWords) > 2:
-                print('navigate_file', transcriptWords[len(transcriptWords)-1])    
+                # case: detected 'format' should be false positive
+                print("fallback")
+    elif (
+        "terminal" in transcriptWords
+        and "open" in transcriptWords
+        and transcriptWordsCount < 5
+    ):
+        # commands: open (a) (new) terminal
+        print("success", "open_terminal")
+
+    elif "run" in transcriptWords:
+        if transcriptWordsCount == 1:
+            # case: user may want to run the entire project, my interpretation is running this file (need to evaluate this)
+            print("run_file")
+        # case: discarded cases of noise or false positives
+        elif (
+            transcriptWordsCount < 4
+            and len(set(transcriptWords) - {"this", "current", "file", "project"}) > 0
+        ):
+            # case: discarded cases of noise or false positives
+            if "file" in transcriptWords:
+                print("run_file")
+            elif "project" in transcriptWords:
+                print("run_project")
             else:
-                print('fallback')
-        if 'copy' in transcript:
-            transcriptWords = transcript.split()
-            if len(transcriptWords)==1:
-                print('copy')
-            else:
-                print('fallback')
+                print("fallback")
+        else:
+            print("fallback")
+
     else:
+        # default case when neither a command is matched nor a fallback is reached
+        # but we still output the transcript for debugging and analysing
         print(transcript)
+
 
 def main():
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
-    language_code = 'en-IN'  # a BCP-47 language tag
+    language_code = "en-IN"  # a BCP-47 language tag
 
-    dialogflow_key = json.load(open('/home/ankur/Code/vspeak-7f688-6a6c851bdbcc.json'))
-    credentials = (service_account.Credentials.from_service_account_info(dialogflow_key))
+    dialogflow_key = json.load(open("/home/ankur/Code/vspeak-7f688-6a6c851bdbcc.json"))
+    credentials = service_account.Credentials.from_service_account_info(dialogflow_key)
     client = speech.SpeechClient(credentials=credentials)
 
     config = types.RecognitionConfig(
         encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=RATE,
-        language_code=language_code)
+        language_code=language_code,
+    )
     streaming_config = types.StreamingRecognitionConfig(
-        config=config,
-        interim_results=True)
+        config=config, interim_results=True
+    )
 
     with MicrophoneStream(RATE, CHUNK) as stream:
         audio_generator = stream.generator()
-        requests = (types.StreamingRecognizeRequest(audio_content=content)
-                    for content in audio_generator)
+        requests = (
+            types.StreamingRecognizeRequest(audio_content=content)
+            for content in audio_generator
+        )
 
         responses = client.streaming_recognize(streaming_config, requests)
 
@@ -191,5 +274,5 @@ def main():
             main()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
