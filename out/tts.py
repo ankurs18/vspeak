@@ -131,7 +131,7 @@ def processTranscript(transcript):
                 else:
                     # case: if the transcript contains two different numbers, it may be noise or the user error
                     # or it does not have any number; we can't execute navigate_line command in either case
-                    print("fallback")
+                    print("fallback", transcript)
             elif "definition" in transcriptWords:
                 if transcriptWordsCount < 5:
                     excludedWords = set(transcriptWords) - {
@@ -148,10 +148,10 @@ def processTranscript(transcript):
                         print("success", "navigate_definition")
                     else:
                         # case: likely noise or false positive
-                        print("fallback")
+                        print("fallback", transcript)
                 else:
                     # case: likely noise or false positive
-                    print("fallback")
+                    print("fallback", transcript)
             elif "class" in transcriptWords:
                 if transcriptWordsCount > 2:
                     # command: 'go (to) file fileName' (assuming implicitly that the last word will be the fileName)
@@ -161,7 +161,7 @@ def processTranscript(transcript):
                         transcriptWords[transcriptWordsCount - 1],
                     )
                 else:
-                    print("fallback")
+                    print("fallback", transcript)
             elif "terminal" in transcriptWords and transcriptWordsCount < 4:
                 print("navigate_terminal")
             elif "file" in transcriptWords:
@@ -173,12 +173,12 @@ def processTranscript(transcript):
                         transcriptWords[transcriptWordsCount - 1],
                     )
                 else:
-                    print("fallback")
+                    print("fallback", transcript)
             else:
                 print("fallback")
         else:
             # case: 'go' by itself has no meaning, we need another argument to gather where do we need to navigate
-            print("fallback")
+            print("fallback", transcript)
     elif "copy" in transcript:
         if transcriptWordsCount == 1:
             # commands: copy
@@ -190,7 +190,7 @@ def processTranscript(transcript):
             print("success", "copy_file")
         else:
             # case: the user may want to copy something else which we don't support yet or the detected 'copy' phrase may be noise
-            print("fallback")
+            print("fallback", transcript)
     elif "format" in transcriptWords:
         if transcriptWordsCount == 1:
             # commands: format
@@ -206,7 +206,7 @@ def processTranscript(transcript):
                 print("success", "format_document")
             else:
                 # case: detected 'format' should be false positive
-                print("fallback")
+                print("fallback", transcript)
     elif (
         "terminal" in transcriptWords
         and "open" in transcriptWords
@@ -230,14 +230,14 @@ def processTranscript(transcript):
             elif "project" in transcriptWords:
                 print("run_project")
             else:
-                print("fallback")
+                print("fallback", transcript)
         else:
-            print("fallback")
+            print("fallback", transcript)
 
     else:
         # default case when neither a command is matched nor a fallback is reached
         # but we still output the transcript for debugging and analysing
-        print(transcript)
+        print("fallback", transcript)
 
 
 def main():
@@ -245,7 +245,7 @@ def main():
     # for a list of supported languages.
     language_code = "en-IN"  # a BCP-47 language tag
 
-    dialogflow_key = json.load(open("/home/ankur/Code/vspeak-7f688-6a6c851bdbcc.json"))
+    dialogflow_key = json.load(open("vspeak-7f688-6a6c851bdbcc.json"))
     credentials = service_account.Credentials.from_service_account_info(dialogflow_key)
     client = speech.SpeechClient(credentials=credentials)
 

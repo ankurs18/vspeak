@@ -32,7 +32,7 @@ class SpeechListener {
 
 	run() {
 		print('Trying to run speech detection');
-		this.child = this.execFile('python', [join(__dirname, 'tts.py')]).on('error', (error: any) => print(error));
+		this.child = this.execFile('python3', [join(__dirname, 'tts.py')]).on('error', (error: any) => print(error));
 		this.child.stdout.on('data',
 			(data: Buffer) => {
 
