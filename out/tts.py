@@ -10,6 +10,7 @@ from google.oauth2 import service_account
 import json
 import pyaudio
 from six.moves import queue
+from commands import Commands
 
 # Audio recording parameters
 RATE = 16000
@@ -26,6 +27,7 @@ class MicrophoneStream(object):
         # Create a thread-safe buffer of audio data
         self._buff = queue.Queue()
         self.closed = True
+        self.commands = {}
 
     def __enter__(self):
         self._audio_interface = pyaudio.PyAudio()
@@ -114,7 +116,7 @@ def listen_print_loop(responses):
         transcript = result.alternatives[0].transcript
 
         if result.is_final:
-            processTranscript(transcript)
+            processTranscript2(transcript)
 
 
 def processTranscript(transcript):
@@ -240,12 +242,32 @@ def processTranscript(transcript):
         print("fallback", transcript)
 
 
+def processTranscript2(transcript):
+    sys.stdout.flush()
+    commandObj = Commands(transcript)
+    final = commandObj.getCommand()
+    print(final)
+    if final.param == "number":
+        numbers = [int(s) for s in transcript.split() if s.isdigit()]
+        if len(numbers) == 1:
+            print("success", final.command, numbers[0])
+        else:
+            print("fallback", transcript)
+    elif final.param == "selected":
+        if len(numbers) == 1:
+            print("success", final.command)
+        else:
+            print("fallback", transcript)
+    else:
+        print("fallback", transcript)
+
+
 def main():
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
     language_code = "en-IN"  # a BCP-47 language tag
 
-    dialogflow_key = json.load(open("vspeak-7f688-6a6c851bdbcc.json"))
+    dialogflow_key = json.load(open("/Users/rmaurya/vspeak-7f688-6a6c851bdbcc.json"))
     credentials = service_account.Credentials.from_service_account_info(dialogflow_key)
     client = speech.SpeechClient(credentials=credentials)
 
