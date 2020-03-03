@@ -10,20 +10,25 @@ class Commands:
     def __init__(self, transcript):
         self.commanKeyDict = {
             "go": {
-                "maxwords": 5,
                 "tags": ["go to", "goto", "naviagte to", "move to"],
-                "arguments": {
-                    "name": ["line", "definition"],
-                    "parameter": ["number", ""],
-                    "command": ["navigate_line", "navigate_definition"],
+                "attributes": {
+                    "name": ["line", "definition", "class"],
+                    "parameter": ["number", "", "string"],
+                    "command": [
+                        "navigate_line",
+                        "navigate_definition",
+                        "navigate_class",
+                    ],
+                    "wordlen": [(4, 7), (3, 5), (3, 6)],
                 },
             }
         }
-        self.transcript = transcript.lower()
+        self.transcript = transcript.lower().split()
+        self.transcriptLength = len(self.transcript)
 
     def getParams(self, param, argName):
         if param == "number":
-            numbers = [int(s) for s in self.transcript.split() if s.isdigit()]
+            numbers = [int(s) for s in self.transcript if s.isdigit()]
             if len(numbers) == 1:
                 return numbers[0]
             else:
@@ -37,42 +42,50 @@ class Commands:
                 return None
 
     def getCommand(self):
-        arguments = self.getCommandKey()
-
+        attributes = self.getCommandKeyAttributes()
         command = "fallback"
         paramValue = ""
-        if arguments is not None:
+        if attributes is not None:
             idx = -1
-            for argument in arguments.get("name"):
-                index = self.transcript.find(argument)
+            names = attributes.get("name")
+            for i in range(len(names)):
+                index = self.subfinder(self.transcript, names[i].split())
+                # index = self.transcript.find(names[i])
                 if index > -1:
-                    idx = index
+                    idx = i
 
             if idx > -1:
-                paramValue = getParams(
-                    arguments.get("parameter")[idx], arguments.get("name")[idx]
+                paramValue = self.getParams(
+                    attributes.get("parameter")[idx], attributes.get("name")[idx]
                 )
                 # if paramValue is None:
                 #     return {"command": command, "parameter": paramValue}
-                command = arguments.command[idx]
+                command = attributes.get("command")[idx]
         return {"command": command, "parameter": paramValue}
 
-    def getCommandKey(self):
+    def getCommandKeyAttributes(self):
         commandKeys = self.commanKeyDict.keys()
         for key in commandKeys:
             tags = self.commanKeyDict[key].get("tags")
             for tag in tags:
-                index = self.transcript.find(tag)
+                index = self.subfinder(self.transcript, tag.split())
                 if index > -1:
                     self.transcript = self.transcript[index:]
-                    return self.commanKeyDict[key].get("arguments")
-                else:
-                    return None
+                    return self.commanKeyDict[key].get("attributes")
+
+        return None
+
+    def subfinder(self, mylist, pattern):
+        for i in range(len(mylist)):
+            if mylist[i] == pattern[0] and mylist[i : i + len(pattern)] == pattern:
+                return i
+        return -1
 
 
 def main():
-    commandObj = Commands("goto line 10")
+    commandObj = Commands("Please go to class Rambo chutiya hai")
     final = commandObj.getCommand()
+    print(final)
 
 
 if __name__ == "__main__":
