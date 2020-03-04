@@ -23,6 +23,7 @@ class Commands:
                 },
             }
         }
+        self.original = transcript
         self.transcript = transcript.lower().split()
         self.transcriptLength = len(self.transcript)
 
@@ -35,15 +36,18 @@ class Commands:
                 return None
 
         if param == "string":
-            nextword = self.transcript[self.transcript.index(argName) + 1]
-            if nextword is not None:
+            argIndex = self.transcript.index(argName)
+            if argIndex < (len(self.transcript) - 1):
+                nextword = self.transcript[argIndex + 1]
                 return nextword
             else:
                 return None
+        return param
 
     def getCommand(self):
         attributes = self.getCommandKeyAttributes()
-        command = "fallback"
+        response = "fallback"
+        command = self.original
         paramValue = ""
         if attributes is not None:
             idx = -1
@@ -58,10 +62,15 @@ class Commands:
                 paramValue = self.getParams(
                     attributes.get("parameter")[idx], attributes.get("name")[idx]
                 )
-                # if paramValue is None:
-                #     return {"command": command, "parameter": paramValue}
+                response = "success"
                 command = attributes.get("command")[idx]
-        return {"command": command, "parameter": paramValue}
+                if paramValue is None:
+                    response = "fallback"
+                    command = self.original
+
+        print(response, command, paramValue)
+        return
+        # return {"response": response, "command": command, "parameter": paramValue}
 
     def getCommandKeyAttributes(self):
         commandKeys = self.commanKeyDict.keys()
@@ -82,11 +91,11 @@ class Commands:
         return -1
 
 
-def main():
-    commandObj = Commands("Please go to class Rambo chutiya hai")
-    final = commandObj.getCommand()
-    print(final)
+# def main():
+#     commandObj = Commands("Please go to class Rambo chutiya hai")
+#     final = commandObj.getCommand()
+#     print(final)
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

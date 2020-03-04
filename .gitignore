@@ -5,3 +5,4 @@ node_modules
 .vscode
 .history
 __pycache__
+.DS_Store

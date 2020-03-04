@@ -243,23 +243,9 @@ def processTranscript(transcript):
 
 
 def processTranscript2(transcript):
-    sys.stdout.flush()
     commandObj = Commands(transcript)
     final = commandObj.getCommand()
-    print(final)
-    if final.param == "number":
-        numbers = [int(s) for s in transcript.split() if s.isdigit()]
-        if len(numbers) == 1:
-            print("success", final.command, numbers[0])
-        else:
-            print("fallback", transcript)
-    elif final.param == "selected":
-        if len(numbers) == 1:
-            print("success", final.command)
-        else:
-            print("fallback", transcript)
-    else:
-        print("fallback", transcript)
+    sys.stdout.flush()
 
 
 def main():
