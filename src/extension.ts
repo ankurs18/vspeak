@@ -4,7 +4,10 @@ import { join } from 'path';
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-
+const fs = require('fs');
+import 'hashmap';
+var HashMap = require('hashmap');
+var map: { set: (arg0: any, arg1: any) => void; has: (arg0: string) => any; get: (arg0: string) => string; };
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -16,6 +19,13 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+	map = new HashMap();
+	var filePath = "/Users/udikshasingh/Projects/vspeak/out/commands.json";
+    var data = JSON.parse(fs.readFileSync(filePath));
+    for(var i = 0; i < data.length; i++) {
+        var item = data[i];
+        map.set(data[i].command, data[i].exec);
+    }
 	new SpeechListener(context);
 }
 
@@ -52,6 +62,12 @@ class CommandRunner {
 		let activeTextEditor;
 		const words = receivedString.split(' ');
 		const status = words[0] === 'success';
+		var result = receivedString.substr(receivedString.indexOf(" ") + 1);
+        print(result.trim());
+        if(map.has(result)) {
+            print('executing command...');
+            vscode.commands.executeCommand(map.get(result));
+        }
 		if (status) {
 			const commandWords = words.slice(1);
 			switch (commandWords[0]) {

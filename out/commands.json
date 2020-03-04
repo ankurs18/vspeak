@@ -1,0 +1,11 @@
+[
+    {
+      "open": "vscode.openFolder"
+    },
+    {
+      "open file": "vscode.openFolder"
+    },
+    {
+      "open folder": "vscode.openFolder"
+    }
+  ]
