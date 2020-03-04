@@ -9,8 +9,22 @@
 class Commands:
     def __init__(self):
         self.commanKeyDict = {
+            "open": {
+                "tags": ["open"],
+                "attributes": {
+                    "name": ["file", "folder", "workspace", ""],
+                    "parameter": ["", "", "", ""],
+                    "command": [
+                        "open_file",
+                        "open_folder",
+                        "open_workspace",
+                        "open_file",
+                    ],
+                    "wordlen": [(2, 3), (2, 3), (2, 3), (1, 1)],
+                },
+            },
             "go": {
-                "tags": ["go to", "goto", "naviagte to", "move to"],
+                "tags": ["go to", "goto", "navigate to", "move to"],
                 "attributes": {
                     "name": ["line", "definition", "class", "file"],
                     "parameter": ["number", "", "string", ""],
@@ -83,12 +97,13 @@ class Commands:
         return param
 
     def getCommand(self, transcript):
+
         self.transcript = transcript.lower().split()
         self.original = self.transcript
         self.transcriptLength = len(self.transcript)
         attributes = self.getCommandKeyAttributes()
         response = "fallback"
-        command = self.original
+        command = transcript
         paramValue = ""
         if attributes is not None:
             idx = -1
@@ -110,7 +125,7 @@ class Commands:
                     command = attributes.get("command")[idx]
                     if paramValue is None:
                         response = "fallback"
-                        command = self.original
+                        command = transcript
 
         print(response, command, paramValue, flush=True)
         return
