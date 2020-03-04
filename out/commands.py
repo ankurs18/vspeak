@@ -12,16 +12,53 @@ class Commands:
             "go": {
                 "tags": ["go to", "goto", "naviagte to", "move to"],
                 "attributes": {
-                    "name": ["line", "definition", "class"],
-                    "parameter": ["number", "", "string"],
+                    "name": ["line", "definition", "class", "file"],
+                    "parameter": ["number", "", "string", ""],
                     "command": [
                         "navigate_line",
                         "navigate_definition",
                         "navigate_class",
+                        "navigate_file",
                     ],
-                    "wordlen": [(4, 7), (3, 5), (3, 6)],
+                    "wordlen": [(4, 7), (3, 5), (3, 6), (2, 4)],
                 },
-            }
+            },
+            "close": {
+                "tags": ["close"],
+                "attributes": {
+                    "name": [
+                        "current file",
+                        "this file",
+                        "all files",
+                        "files to the right",
+                        "file to the right",
+                        "files to the left",
+                        "file to the left",
+                        "window",
+                    ],
+                    "parameter": ["", "", "", "", "", ""],
+                    "command": [
+                        "close_current_file",
+                        "close_current_file",
+                        "close_all_files",
+                        "close_to_the_right",
+                        "close_to_the_right",
+                        "close_to_the_left",
+                        "close_to_the_left",
+                        "close_window",
+                    ],
+                    "wordlen": [
+                        (3, 4),
+                        (3, 4),
+                        (3, 5),
+                        (3, 6),
+                        (3, 6),
+                        (3, 6),
+                        (3, 6),
+                        (2, 3),
+                    ],
+                },
+            },
         }
         self.original = transcript
         self.transcript = transcript.lower().split()
