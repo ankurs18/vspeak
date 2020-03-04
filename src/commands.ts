@@ -55,5 +55,9 @@ export default [
   {
     command: "close_window",
     exec: "workbench.action.closeWindow"
-  }
+  },
+  {
+    command: "next_match",
+    exec: "editor.action.nextMatchFindAction"
+  },
 ];

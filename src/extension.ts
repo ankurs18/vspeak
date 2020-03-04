@@ -67,12 +67,22 @@ class CommandRunner {
     // var result = receivedString.substr(receivedString.indexOf(" ") + 1);
     // print(result.trim());
 
-    if (status) {
+    // added vscode.window.state.focused because commands should only run when vs code window is in the foreground
+    if (status && vscode.window.state.focused) {
       const commandWords = words.slice(1);
       if (MAP.has(commandWords[0])) {
         vscode.commands.executeCommand(MAP.get(commandWords[0]));
       } else {
         switch (commandWords[0]) {
+          case "search_google":
+            activeTextEditor = vscode.window.activeTextEditor;
+            if (activeTextEditor) {
+              const text = activeTextEditor.document.getText(
+                activeTextEditor.selection
+              );
+              vscode.env.openExternal(vscode.Uri.parse("https://www.google.com/search?q="+ text));
+            }
+            break;
           case "navigate_line":
             const lineNumber = parseInt(commandWords[1]);
             activeTextEditor = vscode.window.activeTextEditor;
@@ -138,8 +148,13 @@ class CommandRunner {
               const currentFileName = activeTextEditor.document.fileName;
               const activeTerminal = vscode.window.activeTerminal;
               if (activeTerminal) {
+                if (activeTextEditor.document.languageId === 'python'){
                 // TODO: implement functionality for other languages
                 activeTerminal.sendText("python " + currentFileName);
+                }
+                else{
+                  vscode.window.showErrorMessage("Oops! Unsupported language for run commapnd")
+                }
               }
             }
             break;

@@ -23,6 +23,32 @@ class Commands:
                     "wordlen": [(2, 3), (2, 3), (2, 3), (1, 1)],
                 },
             },
+            "search": {
+                "tags": ["search"],
+                "attributes": {
+                    "name": ["file", "folder", "workspace", "google"],
+                    "parameter": ["", "", "", ""],
+                    "command": [
+                        "search_workspace",
+                        "search_workspace",
+                        "search_workspace",
+                        "search_google",
+                    ],
+                    "wordlen": [(2, 3), (2, 3), (2, 3), (2, 3)],
+                },
+            },
+            "next": {
+                "tags": ["next"],
+                "attributes": {
+                    "name": ["match", ""],
+                    "parameter": ["", ""],
+                    "command": [
+                        "next_match",
+                        "next_match",
+                    ],
+                    "wordlen": [(1, 2), (1, 2)],
+                },
+            },
             "go": {
                 "tags": ["go to", "goto", "navigate to", "move to"],
                 "attributes": {
@@ -109,12 +135,10 @@ class Commands:
             idx = -1
             names = attributes.get("name")
             for i in range(len(names)):
-                index = self.subfinder(self.transcript, names[i].split())
-                # index = self.transcript.find(names[i])
+                index = self.subfinder(self.transcript, names[i].split()) if len(names[i]) > 0 else 0
                 if index > -1:
                     idx = i
                     break
-
             if idx > -1:
                 (minLen, maxLen) = attributes["wordlen"][idx]
                 if minLen <= len(self.original) <= maxLen:
@@ -152,7 +176,7 @@ class Commands:
 
 # def main():
 #     commandObj = Commands()
-#     commandObj.getCommand("Please go to line number 28 as as")
+#     commandObj.getCommand("search google")
 
 
 # if __name__ == "__main__":
