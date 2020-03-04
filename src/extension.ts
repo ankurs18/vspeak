@@ -5,7 +5,6 @@ import { join } from 'path';
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 const fs = require('fs');
-import 'hashmap';
 var HashMap = require('hashmap');
 var map: { set: (arg0: any, arg1: any) => void; has: (arg0: string) => any; get: (arg0: string) => string; };
 // this method is called when your extension is activated

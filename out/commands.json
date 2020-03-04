@@ -1,11 +1,14 @@
 [
     {
-      "open": "vscode.openFolder"
+      "command": "open",
+      "exec": "vscode.openFolder"
     },
     {
-      "open file": "vscode.openFolder"
+      "command": "open file",
+      "exec": "vscode.openFolder"
     },
     {
-      "open folder": "vscode.openFolder"
+      "command": "open folder",
+      "exec": "vscode.openFolder"
     }
   ]
