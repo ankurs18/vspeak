@@ -7,7 +7,7 @@
 
 
 class Commands:
-    def __init__(self, transcript):
+    def __init__(self):
         self.commanKeyDict = {
             "go": {
                 "tags": ["go to", "goto", "naviagte to", "move to"],
@@ -60,9 +60,10 @@ class Commands:
                 },
             },
         }
-        self.original = transcript
-        self.transcript = transcript.lower().split()
-        self.transcriptLength = len(self.transcript)
+        transcript = ""
+        self.original = ""
+        self.transcript = ""
+        self.transcriptLength = 0
 
     def getParams(self, param, argName):
         if param == "number":
@@ -81,7 +82,10 @@ class Commands:
                 return None
         return param
 
-    def getCommand(self):
+    def getCommand(self, transcript):
+        self.transcript = transcript.lower().split()
+        self.original = self.transcript
+        self.transcriptLength = len(self.transcript)
         attributes = self.getCommandKeyAttributes()
         response = "fallback"
         command = self.original
@@ -94,18 +98,21 @@ class Commands:
                 # index = self.transcript.find(names[i])
                 if index > -1:
                     idx = i
+                    break
 
             if idx > -1:
-                paramValue = self.getParams(
-                    attributes.get("parameter")[idx], attributes.get("name")[idx]
-                )
-                response = "success"
-                command = attributes.get("command")[idx]
-                if paramValue is None:
-                    response = "fallback"
-                    command = self.original
+                (minLen, maxLen) = attributes["wordlen"][idx]
+                if minLen <= len(self.original) <= maxLen:
+                    paramValue = self.getParams(
+                        attributes.get("parameter")[idx], attributes.get("name")[idx]
+                    )
+                    response = "success"
+                    command = attributes.get("command")[idx]
+                    if paramValue is None:
+                        response = "fallback"
+                        command = self.original
 
-        print(response, command, paramValue)
+        print(response, command, paramValue, flush=True)
         return
         # return {"response": response, "command": command, "parameter": paramValue}
 
@@ -129,9 +136,8 @@ class Commands:
 
 
 # def main():
-#     commandObj = Commands("Please go to class Rambo chutiya hai")
-#     final = commandObj.getCommand()
-#     print(final)
+#     commandObj = Commands()
+#     commandObj.getCommand("Please go to line number 28 as as")
 
 
 # if __name__ == "__main__":

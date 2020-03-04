@@ -2,6 +2,7 @@ from __future__ import division
 
 import re
 import sys
+import os
 
 from google.cloud import speech
 from google.cloud.speech import enums
@@ -15,6 +16,7 @@ from commands import Commands
 # Audio recording parameters
 RATE = 16000
 CHUNK = int(RATE / 10)  # 100ms
+commandObj = Commands()
 
 
 class MicrophoneStream(object):
@@ -243,17 +245,14 @@ def processTranscript(transcript):
 
 
 def processTranscript2(transcript):
-    commandObj = Commands(transcript)
-    final = commandObj.getCommand()
-    sys.stdout.flush()
+    commandObj.getCommand(transcript)
 
 
 def main():
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
     language_code = "en-IN"  # a BCP-47 language tag
-
-    dialogflow_key = json.load(open("/Users/rmaurya/vspeak-7f688-6a6c851bdbcc.json"))
+    dialogflow_key = json.load(open(sys.path[0] + "/vspeak-7f688-6a6c851bdbcc.json"))
     credentials = service_account.Credentials.from_service_account_info(dialogflow_key)
     client = speech.SpeechClient(credentials=credentials)
 
