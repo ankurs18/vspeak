@@ -12,19 +12,20 @@ class Commands:
             "open": {
                 "tags": ["open"],
                 "attributes": {
-                    "name": ["file", "folder", "workspace", ""],
-                    "parameter": ["", "", "", ""],
+                    "name": ["file", "folder", "workspace", "terminal", ""],
+                    "parameter": ["", "", "", "", ""],
                     "command": [
                         "open_file",
-                        "open_folder",
+                        "open_file",  # we execute the same command on the vscode side for folder/file, so send the same command from here too
                         "open_workspace",
+                        "navigate_terminal",
                         "open_file",
                     ],
-                    "wordlen": [(2, 3), (2, 3), (2, 3), (1, 1)],
+                    "wordlen": [(2, 3), (2, 3), (2, 3), (2, 3), (1, 1)],
                 },
             },
             "search": {
-                "tags": ["search"],
+                "tags": ["search", "find"],
                 "attributes": {
                     "name": ["file", "folder", "workspace", "google"],
                     "parameter": ["", "", "", ""],
@@ -34,7 +35,7 @@ class Commands:
                         "search_workspace",
                         "search_google",
                     ],
-                    "wordlen": [(2, 3), (2, 3), (2, 3), (2, 3)],
+                    "wordlen": [(2, 4), (2, 4), (2, 3), (2, 2)],
                 },
             },
             "next": {
@@ -42,25 +43,23 @@ class Commands:
                 "attributes": {
                     "name": ["match", ""],
                     "parameter": ["", ""],
-                    "command": [
-                        "next_match",
-                        "next_match",
-                    ],
+                    "command": ["next_match", "next_match",],
                     "wordlen": [(1, 2), (1, 2)],
                 },
             },
             "go": {
                 "tags": ["go to", "goto", "navigate to", "move to"],
                 "attributes": {
-                    "name": ["line", "definition", "class", "file"],
-                    "parameter": ["number", "", "string", ""],
+                    "name": ["line", "definition", "class", "file", "terminal"],
+                    "parameter": ["number", "", "string", "", ""],
                     "command": [
                         "navigate_line",
                         "navigate_definition",
                         "navigate_class",
                         "navigate_file",
+                        "navigate_terminal",
                     ],
-                    "wordlen": [(4, 7), (3, 5), (3, 6), (2, 4)],
+                    "wordlen": [(4, 7), (3, 5), (3, 6), (2, 4), (2, 3)],
                 },
             },
             "close": {
@@ -135,7 +134,11 @@ class Commands:
             idx = -1
             names = attributes.get("name")
             for i in range(len(names)):
-                index = self.subfinder(self.transcript, names[i].split()) if len(names[i]) > 0 else 0
+                index = (
+                    self.subfinder(self.transcript, names[i].split())
+                    if len(names[i]) > 0
+                    else 0
+                )
                 if index > -1:
                     idx = i
                     break

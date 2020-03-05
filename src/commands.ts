@@ -5,10 +5,6 @@ export default [
     exec: "workbench.action.files.openFileFolder"
   },
   {
-    command: "open_folder",
-    exec: "workbench.action.files.openFileFolder"
-  },
-  {
     command: "open_workspace",
     exec: "workbench.action.openWorkspace"
   },
@@ -59,5 +55,9 @@ export default [
   {
     command: "next_match",
     exec: "editor.action.nextMatchFindAction"
+  },
+  {
+    command: "search_workspace",
+    exec: "filesExplorer.findInWorkspace"
   },
 ];
