@@ -60,4 +60,28 @@ export default [
     command: "search_workspace",
     exec: "filesExplorer.findInWorkspace"
   },
+  {
+    command: "run_project",
+    exec: "workbench.action.debug.run"
+  },
+  {
+    command: "run_file",
+    exec: "code-runner.run"
+  },
+  {
+    command: "start_debug",
+    exec: "workbench.action.debug.start"
+  },
+  {
+    command: "pause_debug",
+    exec: "workbench.action.debug.pause"
+  },
+  {
+    command: "continue_debug",
+    exec: "workbench.action.debug.continue"
+  },
+  {
+    command: "stop_debug",
+    exec: "workbench.action.debug.stop"
+  },
 ];

@@ -74,6 +74,29 @@ class CommandRunner {
         vscode.commands.executeCommand(MAP.get(commandWords[0]));
       } else {
         switch (commandWords[0]) {
+          case "continue":
+            if (vscode.debug.activeDebugSession) {
+              print('Context aware continue while in debug');
+              vscode.commands.executeCommand("workbench.action.debug.continue");
+            }
+            else {
+              print('Falling back as no context found for "continue"');
+            }
+            break;
+          case "stop":
+            if (vscode.debug.activeDebugSession) {
+              print('Context aware "stop" while in debug');
+              vscode.commands.executeCommand("workbench.action.debug.stop");
+            }
+            else {
+              print('Falling back as no context found for "stop"');
+            }
+            break;
+          case "continue":
+            if (vscode.debug.activeDebugSession) {
+              vscode.commands.executeCommand("workbench.action.debug.continue");
+            }
+            break;
           case "search_google":
             activeTextEditor = vscode.window.activeTextEditor;
             if (activeTextEditor) {

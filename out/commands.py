@@ -24,6 +24,35 @@ class Commands:
                     "wordlen": [(2, 3), (2, 3), (2, 3), (2, 3), (1, 1)],
                 },
             },
+            "run": {
+                "tags": ["run"],
+                "attributes": {
+                    "name": ["file", "project", ""],
+                    "parameter": ["", "", ""],
+                    "command": [
+                        "run_file",
+                        "run_project",
+                        "run_file",  # could be run_project when nothing is specified, need to understand user's expectation
+                    ],
+                    "wordlen": [(2, 4), (2, 4), (1, 1)],
+                },
+            },
+            "debug": {
+                "tags": ["debug", "debugging", "debugger"],
+                "attributes": {
+                    "name": ["start", "stop", "project", "pause", "continue", ""],
+                    "parameter": ["", "", "", "", "", ""],
+                    "command": [
+                        "start_debug",
+                        "stop_debug",
+                        "start_debug",
+                        "pause_debug",
+                        "continue_debug",
+                        "start_debug",
+                    ],
+                    "wordlen": [(2, 5), (2, 2), (2, 4), (2, 4), (2, 4), (1, 3)],
+                },
+            },
             "search": {
                 "tags": ["search", "find"],
                 "attributes": {
@@ -98,8 +127,28 @@ class Commands:
                     ],
                 },
             },
+            # general commands created for continue and stop while debugging but may be used as other context-aware commands;
+            # make sure to keep this below the original command as it should have lower priority as 
+            # previous exact command may match completely
+            "conitnue": {
+                "tags": ["continue"],
+                "attributes": {
+                    "name": [""],
+                    "parameter": [""],
+                    "command": ["continue"],
+                    "wordlen": [(1, 2)],
+                },
+            },
+            "stop": {
+                "tags": ["stop"],
+                "attributes": {
+                    "name": [""],
+                    "parameter": [""],
+                    "command": ["stop"],
+                    "wordlen": [(1, 2)],
+                },
+            },
         }
-        transcript = ""
         self.original = ""
         self.transcript = ""
         self.transcriptLength = 0
@@ -112,7 +161,7 @@ class Commands:
             else:
                 return None
 
-        if param == "string":
+        elif param == "string":
             argIndex = self.transcript.index(argName)
             if argIndex < (len(self.transcript) - 1):
                 nextword = self.transcript[argIndex + 1]
@@ -177,10 +226,10 @@ class Commands:
         return -1
 
 
-# def main():
-#     commandObj = Commands()
-#     commandObj.getCommand("search google")
+def main():
+    commandObj = Commands()
+    commandObj.getCommand("stop")
 
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
