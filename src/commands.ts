@@ -116,4 +116,24 @@ export default [
     command: "show_previousChange",
     exec: "editor.action.dirtydiff.previous"
   },
+  {
+    command: "zoom_in",
+    exec: "workbench.action.zoomIn"
+  },
+  {
+    command: "zoom_out",
+    exec: "workbench.action.zoomOut"
+  },
+  {
+    command: "save",
+    exec: "workbench.action.files.save"
+  },
+  {
+    command: "save_as",
+    exec: "workbench.action.files.saveAs"
+  },
+  {
+    command: "save_all",
+    exec: "workbench.action.files.saveAll"
+  },
 ];

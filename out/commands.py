@@ -178,10 +178,28 @@ class Commands:
             "show": {
                 "tags": ["show"],
                 "attributes": {
-                    "name": ["all commands", "context menu", "hover", "next change", "previous change"],
-                    "parameter": ["", "", "", "", ""],
-                    "command": ["show_commands", "show_contextMenu", "show_hover", "show_nextChange", "show_previousChange"],
-                    "wordlen": [(3, 4), (3, 4), (2, 3), (3, 4), (3, 4)],
+                    "name": ["all commands", "context menu", "next change", "previous change"],
+                    "parameter": ["", "", "", ""],
+                    "command": ["show_commands", "show_contextMenu", "show_nextChange", "show_previousChange"],
+                    "wordlen": [(3, 4), (3, 4), (3, 4), (3, 4)],
+                },
+            },
+            "zoom": {
+                "tags": ["zoom"],
+                "attributes": {
+                    "name": ["in", "out"],
+                    "parameter": ["", ""],
+                    "command": ["zoom_in", "zoom_out"],
+                    "wordlen": [(2, 2), (2, 2)],
+                },
+            },
+            "save": {
+                "tags": ["save"],
+                "attributes": {
+                    "name": ["as", "all", ""],
+                    "parameter": ["", "", ""],
+                    "command": ["save_as", "save_all", "save"],
+                    "wordlen": [(2, 2), (2, 3), (1,2)],
                 },
             },
         }
