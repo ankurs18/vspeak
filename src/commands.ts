@@ -84,4 +84,36 @@ export default [
     command: "stop_debug",
     exec: "workbench.action.debug.stop"
   },
+  {
+    command: "cut",
+    exec: "editor.action.clipboardCutAction"
+  },
+  {
+    command: "copy",
+    exec: "editor.action.clipboardCopyAction"
+  },
+  {
+    command: "paste",
+    exec: "editor.action.clipboardPasteAction"
+  },
+  {
+    command: "show_commands",
+    exec: "workbench.action.showCommands"
+  },
+  {
+    command: "show_contextMenu",
+    exec: "editor.action.showContextMenu"
+  },
+  {
+    command: "show_hover",
+    exec: "editor.action.showHover"
+  },
+  {
+    command: "show_nextChange",
+    exec: "editor.action.dirtydiff.next"
+  },
+  {
+    command: "show_previousChange",
+    exec: "editor.action.dirtydiff.previous"
+  },
 ];

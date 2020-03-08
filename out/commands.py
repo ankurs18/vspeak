@@ -148,6 +148,42 @@ class Commands:
                     "wordlen": [(1, 2)],
                 },
             },
+            "cut": {
+                "tags": ["cut"],
+                "attributes": {
+                    "name": [""],
+                    "parameter": [""],
+                    "command": ["cut"],
+                    "wordlen": [(1, 1)],
+                },
+            },
+            "copy": {
+                "tags": ["copy"],
+                "attributes": {
+                    "name": [""],
+                    "parameter": [""],
+                    "command": ["copy"],
+                    "wordlen": [(1, 1)],
+                },
+            },
+            "paste": {
+                "tags": ["paste"],
+                "attributes": {
+                    "name": [""],
+                    "parameter": [""],
+                    "command": ["paste"],
+                    "wordlen": [(1, 1)],
+                },
+            },
+            "show": {
+                "tags": ["show"],
+                "attributes": {
+                    "name": ["all commands", "context menu", "hover", "next change", "previous change"],
+                    "parameter": ["", "", "", "", ""],
+                    "command": ["show_commands", "show_contextMenu", "show_hover", "show_nextChange", "show_previousChange"],
+                    "wordlen": [(3, 4), (3, 4), (2, 3), (3, 4), (3, 4)],
+                },
+            },
         }
         self.original = ""
         self.transcript = ""
