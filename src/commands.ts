@@ -136,4 +136,28 @@ export default [
     command: "save_all",
     exec: "workbench.action.files.saveAll"
   },
+  {
+    command: "scroll_up",
+    exec: "scrollPageUp"
+  },
+  {
+    command: "scroll_down",
+    exec: "scrollPageDown"
+  },
+  {
+    command: "open_settings",
+    exec: "workbench.action.openSettings"
+  },
+  {
+    command: "add_comment",
+    exec: "editor.action.addCommentLine"
+  },
+  {
+    command: "remove_comment",
+    exec: "editor.action.removeCommentLine"
+  },
+  {
+    command: "toggle_comment",
+    exec: "editor.action.commentLine"
+  },
 ];

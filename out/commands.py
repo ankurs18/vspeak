@@ -12,16 +12,17 @@ class Commands:
             "open": {
                 "tags": ["open"],
                 "attributes": {
-                    "name": ["file", "folder", "workspace", "terminal", ""],
-                    "parameter": ["", "", "", "", ""],
+                    "name": ["file", "folder", "workspace", "terminal", "settings", ""],
+                    "parameter": ["", "", "", "", "", ""],
                     "command": [
                         "open_file",
                         "open_file",  # we execute the same command on the vscode side for folder/file, so send the same command from here too
                         "open_workspace",
                         "navigate_terminal",
+                        "open_settings",
                         "open_file",
                     ],
-                    "wordlen": [(2, 3), (2, 3), (2, 3), (2, 3), (1, 1)],
+                    "wordlen": [(2, 3), (2, 3), (2, 3), (2, 3), (2, 3), (1, 1)],
                 },
             },
             "run": {
@@ -200,6 +201,24 @@ class Commands:
                     "parameter": ["", "", ""],
                     "command": ["save_as", "save_all", "save"],
                     "wordlen": [(2, 2), (2, 3), (1,2)],
+                },
+            },
+            "scroll": {
+                "tags": ["scroll"],
+                "attributes": {
+                    "name": ["up", "down"],
+                    "parameter": ["", ""],
+                    "command": ["scroll_up", "scroll_down"],
+                    "wordlen": [(2, 2), (2, 2)],
+                },
+            },
+            "comment": {
+                "tags": ["comment", "uncomment"],
+                "attributes": {
+                    "name": ["line", "lines", "selection", ""],
+                    "parameter": ["", "", "", ""],
+                    "command": ["toggle_comment", "toggle_comment", "toggle_comment", "toggle_comment"],
+                    "wordlen": [(2, 3), (2, 3), (2, 3), (1, 1)],
                 },
             },
         }
