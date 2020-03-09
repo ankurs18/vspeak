@@ -261,7 +261,6 @@ class Commands:
                 },
             },
         }
-        self.original = ""
         self.transcript = ""
         self.transcriptLength = 0
 
@@ -285,7 +284,6 @@ class Commands:
     def getCommand(self, transcript):
 
         self.transcript = transcript.lower().split()
-        self.original = self.transcript
         self.transcriptLength = len(self.transcript)
         attributes = self.getCommandKeyAttributes()
         response = "fallback"
@@ -305,7 +303,7 @@ class Commands:
                     break
             if idx > -1:
                 (minLen, maxLen) = attributes["wordlen"][idx]
-                if minLen <= len(self.original) <= maxLen:
+                if minLen <= len(self.transcript) <= maxLen:
                     paramValue = self.getParams(
                         attributes.get("parameter")[idx], attributes.get("name")[idx]
                     )
@@ -326,7 +324,6 @@ class Commands:
             for tag in tags:
                 index = self.subfinder(self.transcript, tag.split())
                 if index > -1:
-                    self.transcript = self.transcript
                     return self.commanKeyDict[key].get("attributes")
 
         return None
