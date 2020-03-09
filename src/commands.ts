@@ -165,10 +165,6 @@ export default [
     exec: "actions.find"
   },
   {
-    command: "navigate_line",
-    exec: "workbench.action.gotoLine"
-  },
-  {
     command: "open_window",
     exec: "workbench.action.newWindow"
   },
