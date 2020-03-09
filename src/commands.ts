@@ -60,4 +60,149 @@ export default [
     command: "search_workspace",
     exec: "filesExplorer.findInWorkspace"
   },
+  {
+    command: "run_project",
+    exec: "workbench.action.debug.run"
+  },
+  {
+    command: "run_file",
+    exec: "code-runner.run"
+  },
+  {
+    command: "start_debug",
+    exec: "workbench.action.debug.start"
+  },
+  {
+    command: "pause_debug",
+    exec: "workbench.action.debug.pause"
+  },
+  {
+    command: "continue_debug",
+    exec: "workbench.action.debug.continue"
+  },
+  {
+    command: "stop_debug",
+    exec: "workbench.action.debug.stop"
+  },
+  {
+    command: "cut",
+    exec: "editor.action.clipboardCutAction"
+  },
+  {
+    command: "copy",
+    exec: "editor.action.clipboardCopyAction"
+  },
+  {
+    command: "paste",
+    exec: "editor.action.clipboardPasteAction"
+  },
+  {
+    command: "show_commands",
+    exec: "workbench.action.showCommands"
+  },
+  {
+    command: "show_contextMenu",
+    exec: "editor.action.showContextMenu"
+  },
+  {
+    command: "show_hover",
+    exec: "editor.action.showHover"
+  },
+  {
+    command: "show_nextChange",
+    exec: "editor.action.dirtydiff.next"
+  },
+  {
+    command: "show_previousChange",
+    exec: "editor.action.dirtydiff.previous"
+  },
+  {
+    command: "zoom_in",
+    exec: "workbench.action.zoomIn"
+  },
+  {
+    command: "zoom_out",
+    exec: "workbench.action.zoomOut"
+  },
+  {
+    command: "save",
+    exec: "workbench.action.files.save"
+  },
+  {
+    command: "save_as",
+    exec: "workbench.action.files.saveAs"
+  },
+  {
+    command: "save_all",
+    exec: "workbench.action.files.saveAll"
+  },
+  {
+    command: "scroll_up",
+    exec: "scrollPageUp"
+  },
+  {
+    command: "scroll_down",
+    exec: "scrollPageDown"
+  },
+  {
+    command: "open_settings",
+    exec: "workbench.action.openSettings"
+  },
+  {
+    command: "add_comment",
+    exec: "editor.action.addCommentLine"
+  },
+  {
+    command: "remove_comment",
+    exec: "editor.action.removeCommentLine"
+  },
+  {
+    command: "toggle_comment",
+    exec: "editor.action.commentLine"
+  },
+  {
+    command: "search",
+    exec: "actions.find"
+  },
+  {
+    command: "navigate_line",
+    exec: "workbench.action.gotoLine"
+  },
+  {
+    command: "open_window",
+    exec: "workbench.action.newWindow"
+  },
+  {
+    command: "install_extension",
+    exec: "workbench.extensions.action.installExtensions"
+  },
+  {
+    command: "update_extension",
+    exec: "workbench.extensions.action.updateAllExtensions"
+  },
+  {
+    command: "compare_file",
+    exec: "workbench.files.action.compareFileWith"
+  },
+  {
+    command: "compare_clipboard",
+    exec: "workbench.files.action.compareWithClipboard"
+  },
+  {
+    command: "breakpoint_toggle",
+    exec: "editor.debug.action.toggleBreakpoint"
+  },
+  {
+    command: "breakpoint_remove_all",
+    exec: "workbench.debug.viewlet.action.removeAllBreakpoints"
+  },
+  {
+    command: "breakpoint_enable_all",
+    exec: "workbench.debug.viewlet.action.enableAllBreakpoints"
+  },
+  {
+    command: "breakpoint_disable_all",
+    exec: "workbench.debug.viewlet.action.disableAllBreakpoints"
+  },
+  
 ];

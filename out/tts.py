@@ -252,7 +252,7 @@ def main():
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
     language_code = "en-IN"  # a BCP-47 language tag
-    dialogflow_key = json.load(open(sys.path[0] + "/vspeak-7f688-6a6c851bdbcc.json"))
+    dialogflow_key = json.load(open(sys.path[0] + "/chatbot.json"))
     credentials = service_account.Credentials.from_service_account_info(dialogflow_key)
     client = speech.SpeechClient(credentials=credentials)
 

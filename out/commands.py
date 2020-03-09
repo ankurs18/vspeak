@@ -12,30 +12,62 @@ class Commands:
             "open": {
                 "tags": ["open"],
                 "attributes": {
-                    "name": ["file", "folder", "workspace", "terminal", ""],
-                    "parameter": ["", "", "", "", ""],
+                    "name": ["file", "folder", "workspace", "terminal", "settings", "new window", ""],
+                    "parameter": ["", "", "", "", "", "", ""],
                     "command": [
                         "open_file",
                         "open_file",  # we execute the same command on the vscode side for folder/file, so send the same command from here too
                         "open_workspace",
                         "navigate_terminal",
+                        "open_settings",
+                        "open_window",
                         "open_file",
                     ],
-                    "wordlen": [(2, 3), (2, 3), (2, 3), (2, 3), (1, 1)],
+                    "wordlen": [(2, 3), (2, 3), (2, 3), (2, 3), (2, 3), (3, 4), (1, 1)],
+                },
+            },
+            "run": {
+                "tags": ["run"],
+                "attributes": {
+                    "name": ["file", "project", ""],
+                    "parameter": ["", "", ""],
+                    "command": [
+                        "run_file",
+                        "run_project",
+                        "run_file",  # could be run_project when nothing is specified, need to understand user's expectation
+                    ],
+                    "wordlen": [(2, 4), (2, 4), (1, 1)],
+                },
+            },
+            "debug": {
+                "tags": ["debug", "debugging", "debugger"],
+                "attributes": {
+                    "name": ["start", "stop", "project", "pause", "continue", ""],
+                    "parameter": ["", "", "", "", "", ""],
+                    "command": [
+                        "start_debug",
+                        "stop_debug",
+                        "start_debug",
+                        "pause_debug",
+                        "continue_debug",
+                        "start_debug",
+                    ],
+                    "wordlen": [(2, 5), (2, 2), (2, 4), (2, 4), (2, 4), (1, 3)],
                 },
             },
             "search": {
                 "tags": ["search", "find"],
                 "attributes": {
-                    "name": ["file", "folder", "workspace", "google"],
-                    "parameter": ["", "", "", ""],
+                    "name": ["file", "folder", "workspace", "google", ""],
+                    "parameter": ["", "", "", "", ""],
                     "command": [
                         "search_workspace",
                         "search_workspace",
                         "search_workspace",
                         "search_google",
+                        "search"
                     ],
-                    "wordlen": [(2, 4), (2, 4), (2, 3), (2, 2)],
+                    "wordlen": [(2, 4), (2, 4), (2, 3), (2, 2), (1,2)],
                 },
             },
             "next": {
@@ -98,9 +130,137 @@ class Commands:
                     ],
                 },
             },
+            
+            "cut": {
+                "tags": ["cut"],
+                "attributes": {
+                    "name": [""],
+                    "parameter": [""],
+                    "command": ["cut"],
+                    "wordlen": [(1, 1)],
+                },
+            },
+            "copy": {
+                "tags": ["copy"],
+                "attributes": {
+                    "name": [""],
+                    "parameter": [""],
+                    "command": ["copy"],
+                    "wordlen": [(1, 1)],
+                },
+            },
+            "paste": {
+                "tags": ["paste"],
+                "attributes": {
+                    "name": [""],
+                    "parameter": [""],
+                    "command": ["paste"],
+                    "wordlen": [(1, 1)],
+                },
+            },
+            "show": {
+                "tags": ["show"],
+                "attributes": {
+                    "name": ["all commands", "context menu", "next change", "previous change"],
+                    "parameter": ["", "", "", ""],
+                    "command": ["show_commands", "show_contextMenu", "show_nextChange", "show_previousChange"],
+                    "wordlen": [(3, 4), (3, 4), (3, 4), (3, 4)],
+                },
+            },
+            "zoom": {
+                "tags": ["zoom"],
+                "attributes": {
+                    "name": ["in", "out"],
+                    "parameter": ["", ""],
+                    "command": ["zoom_in", "zoom_out"],
+                    "wordlen": [(2, 2), (2, 2)],
+                },
+            },
+            "save": {
+                "tags": ["save"],
+                "attributes": {
+                    "name": ["as", "all", ""],
+                    "parameter": ["", "", ""],
+                    "command": ["save_as", "save_all", "save"],
+                    "wordlen": [(2, 2), (2, 3), (1,2)],
+                },
+            },
+            "scroll": {
+                "tags": ["scroll"],
+                "attributes": {
+                    "name": ["up", "down"],
+                    "parameter": ["", ""],
+                    "command": ["scroll_up", "scroll_down"],
+                    "wordlen": [(2, 2), (2, 2)],
+                },
+            },
+            "comment": {
+                "tags": ["comment", "uncomment"],
+                "attributes": {
+                    "name": ["line", "lines", "selection", ""],
+                    "parameter": ["", "", "", ""],
+                    "command": ["toggle_comment", "toggle_comment", "toggle_comment", "toggle_comment"],
+                    "wordlen": [(2, 3), (2, 3), (2, 3), (1, 1)],
+                },
+            },
+            "extensions": {
+                "tags": ["install", "update"],
+                "attributes": {
+                    "name": ["extension", "extensions"],
+                    "parameter": ["", ""],
+                    "command": ["install_extension", "update_extension"],
+                    "wordlen": [(2, 3), (3, 4)],
+                },
+            },
+            "breakpoint": {
+                "tags": ["breakpoint", "breakpoints"],
+                "attributes": {
+                    "name": ["add", "delete all", "remove all", "delete", "remove", "toggle", "disable all","enable all"],
+                    "parameter": ["number", "", "", "number", "number", "", "", ""],
+                    "command": ["breakpoint_add", "breakpoint_remove_all", "breakpoint_remove_all", "breakpoint_remove","breakpoint_remove", "breakpoint_toggle", "breakpoint_disable_all", "breakpoint_enable_all"],
+                    "wordlen": [(3, 7), (3,4), (3,4),  (3, 7),(3, 7), (2, 2), (3,4), (3,4)],
+                },
+            },
+            "format": {
+                "tags": ["format"],
+                "attributes": {
+                    "name": ["selection", "selected", ""],
+                    "parameter": ["", "", ""],
+                    "command": ["format_selection", "format_selection", "format_document"],
+                    "wordlen": [(2, 3), (2, 3), (1, 3)],
+                },
+            },
+            "compare": {
+                "tags": ["compare"],
+                "attributes": {
+                    "name": ["clipboard", "copied", ""],
+                    "parameter": ["", "", ""],
+                    "command": ["compare_clipboard", "compare_clipboard", "compare_file"],
+                    "wordlen": [(2, 4), (2, 4), (1, 3)],
+                },
+            },
+            # general commands created for continue and stop while debugging but may be used as other context-aware commands;
+            # make sure to keep this below the original command as it should have lower priority as 
+            # previous exact command may match completely
+            "conitnue": {
+                "tags": ["continue"],
+                "attributes": {
+                    "name": [""],
+                    "parameter": [""],
+                    "command": ["continue"],
+                    "wordlen": [(1, 2)],
+                },
+            },
+            "stop": {
+                "tags": ["stop"],
+                "attributes": {
+                    "name": [""],
+                    "parameter": [""],
+                    "command": ["stop"],
+                    "wordlen": [(1, 2)],
+                },
+            },
         }
-        transcript = ""
-        self.original = ""
         self.transcript = ""
         self.transcriptLength = 0
 
@@ -112,7 +272,7 @@ class Commands:
             else:
                 return None
 
-        if param == "string":
+        elif param == "string":
             argIndex = self.transcript.index(argName)
             if argIndex < (len(self.transcript) - 1):
                 nextword = self.transcript[argIndex + 1]
@@ -124,7 +284,6 @@ class Commands:
     def getCommand(self, transcript):
 
         self.transcript = transcript.lower().split()
-        self.original = self.transcript
         self.transcriptLength = len(self.transcript)
         attributes = self.getCommandKeyAttributes()
         response = "fallback"
@@ -144,7 +303,7 @@ class Commands:
                     break
             if idx > -1:
                 (minLen, maxLen) = attributes["wordlen"][idx]
-                if minLen <= len(self.original) <= maxLen:
+                if minLen <= len(self.transcript) <= maxLen:
                     paramValue = self.getParams(
                         attributes.get("parameter")[idx], attributes.get("name")[idx]
                     )
@@ -165,7 +324,6 @@ class Commands:
             for tag in tags:
                 index = self.subfinder(self.transcript, tag.split())
                 if index > -1:
-                    self.transcript = self.transcript[index:]
                     return self.commanKeyDict[key].get("attributes")
 
         return None
@@ -177,10 +335,10 @@ class Commands:
         return -1
 
 
-# def main():
-#     commandObj = Commands()
-#     commandObj.getCommand("search google")
+def main():
+    commandObj = Commands()
+    commandObj.getCommand("stop")
 
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()

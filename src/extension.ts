@@ -61,6 +61,7 @@ class CommandRunner {
   runCommand(receivedString: string) {
     print("Command received: " + receivedString);
     let activeTextEditor;
+    let lineNumber;
     const words = receivedString.split(" ");
     const status = words[0] === "success";
     // var result = receivedString.substr(receivedString.indexOf(" ") + 1);
@@ -73,6 +74,29 @@ class CommandRunner {
         vscode.commands.executeCommand(MAP.get(commandWords[0]));
       } else {
         switch (commandWords[0]) {
+          case "continue":
+            if (vscode.debug.activeDebugSession) {
+              print('Context aware continue while in debug');
+              vscode.commands.executeCommand("workbench.action.debug.continue");
+            }
+            else {
+              print('Falling back as no context found for "continue"');
+            }
+            break;
+          case "stop":
+            if (vscode.debug.activeDebugSession) {
+              print('Context aware "stop" while in debug');
+              vscode.commands.executeCommand("workbench.action.debug.stop");
+            }
+            else {
+              print('Falling back as no context found for "stop"');
+            }
+            break;
+          case "continue":
+            if (vscode.debug.activeDebugSession) {
+              vscode.commands.executeCommand("workbench.action.debug.continue");
+            }
+            break;
           case "search_google":
             activeTextEditor = vscode.window.activeTextEditor;
             if (activeTextEditor) {
@@ -85,7 +109,7 @@ class CommandRunner {
             }
             break;
           case "navigate_line":
-            const lineNumber = parseInt(commandWords[1]);
+            lineNumber = parseInt(commandWords[1]);
             activeTextEditor = vscode.window.activeTextEditor;
             if (activeTextEditor) {
               const range = activeTextEditor.document.lineAt(lineNumber - 1)
@@ -95,6 +119,30 @@ class CommandRunner {
                 range.start
               );
               activeTextEditor.revealRange(range);
+            }
+            break;
+          case "breakpoint_add":
+            lineNumber = parseInt(commandWords[1]);
+            activeTextEditor = vscode.window.activeTextEditor;
+            if (activeTextEditor) {
+              let position = new vscode.Position(lineNumber - 1, 0);
+              let location = new vscode.Location(activeTextEditor.document.uri, position);
+              let breakpointToAdd = [new vscode.SourceBreakpoint(location, true)];
+              vscode.debug.addBreakpoints(breakpointToAdd);
+            }
+            break;
+          case "breakpoint_remove":
+            lineNumber = parseInt(commandWords[1]);
+            activeTextEditor = vscode.window.activeTextEditor;
+            if (activeTextEditor) {
+              let existingBreakPoints = vscode.debug.breakpoints;
+              for (let breakpoint of existingBreakPoints) {
+                if (breakpoint instanceof vscode.SourceBreakpoint &&
+                  breakpoint.location.uri.path === activeTextEditor.document.uri.path
+                  && breakpoint.location.range.start.line === lineNumber - 1) {
+                  vscode.debug.removeBreakpoints([breakpoint]);
+                }
+              }
             }
             break;
           // case "navigate_definition":
@@ -125,19 +173,6 @@ class CommandRunner {
               vscode.env.clipboard.writeText(text);
             }
             break;
-
-          // case "format_document":
-          //   vscode.commands.executeCommand("editor.action.formatDocument");
-          //   break;
-          // case "format_selection":
-          //   vscode.commands.executeCommand("editor.action.formatSelection");
-          //   break;
-          // case "navigate_terminal":
-          //   vscode.commands.executeCommand("workbench.action.terminal.focus");
-          // break;
-          // case "open_terminal":
-          //   vscode.commands.executeCommand("workbench.action.terminal.new");
-          // break;
           case "navigate_class":
             let className = commandWords[1];
             // TODO: implement functionality
