@@ -12,17 +12,18 @@ class Commands:
             "open": {
                 "tags": ["open"],
                 "attributes": {
-                    "name": ["file", "folder", "workspace", "terminal", "settings", ""],
-                    "parameter": ["", "", "", "", "", ""],
+                    "name": ["file", "folder", "workspace", "terminal", "settings", "new window", ""],
+                    "parameter": ["", "", "", "", "", "", ""],
                     "command": [
                         "open_file",
                         "open_file",  # we execute the same command on the vscode side for folder/file, so send the same command from here too
                         "open_workspace",
                         "navigate_terminal",
                         "open_settings",
+                        "open_window",
                         "open_file",
                     ],
-                    "wordlen": [(2, 3), (2, 3), (2, 3), (2, 3), (2, 3), (1, 1)],
+                    "wordlen": [(2, 3), (2, 3), (2, 3), (2, 3), (2, 3), (3, 4), (1, 1)],
                 },
             },
             "run": {
@@ -57,15 +58,16 @@ class Commands:
             "search": {
                 "tags": ["search", "find"],
                 "attributes": {
-                    "name": ["file", "folder", "workspace", "google"],
-                    "parameter": ["", "", "", ""],
+                    "name": ["file", "folder", "workspace", "google", ""],
+                    "parameter": ["", "", "", "", ""],
                     "command": [
                         "search_workspace",
                         "search_workspace",
                         "search_workspace",
                         "search_google",
+                        "search"
                     ],
-                    "wordlen": [(2, 4), (2, 4), (2, 3), (2, 2)],
+                    "wordlen": [(2, 4), (2, 4), (2, 3), (2, 2), (1,2)],
                 },
             },
             "next": {
@@ -219,6 +221,15 @@ class Commands:
                     "parameter": ["", "", "", ""],
                     "command": ["toggle_comment", "toggle_comment", "toggle_comment", "toggle_comment"],
                     "wordlen": [(2, 3), (2, 3), (2, 3), (1, 1)],
+                },
+            },
+            "extensions": {
+                "tags": ["install", "update"],
+                "attributes": {
+                    "name": ["extension", "extensions"],
+                    "parameter": ["", ""],
+                    "command": ["install_extension", "update_extension"],
+                    "wordlen": [(2, 3), (3, 4)],
                 },
             },
         }

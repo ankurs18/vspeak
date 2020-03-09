@@ -160,4 +160,24 @@ export default [
     command: "toggle_comment",
     exec: "editor.action.commentLine"
   },
+  {
+    command: "search",
+    exec: "actions.find"
+  },
+  {
+    command: "navigate_line",
+    exec: "workbench.action.gotoLine"
+  },
+  {
+    command: "open_window",
+    exec: "workbench.action.newWindow"
+  },
+  {
+    command: "install_extension",
+    exec: "workbench.extensions.action.installExtensions"
+  },
+  {
+    command: "update_extension",
+    exec: "workbench.extensions.action.updateAllExtensions"
+  },
 ];
