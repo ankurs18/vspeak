@@ -130,27 +130,7 @@ class Commands:
                     ],
                 },
             },
-            # general commands created for continue and stop while debugging but may be used as other context-aware commands;
-            # make sure to keep this below the original command as it should have lower priority as 
-            # previous exact command may match completely
-            "conitnue": {
-                "tags": ["continue"],
-                "attributes": {
-                    "name": [""],
-                    "parameter": [""],
-                    "command": ["continue"],
-                    "wordlen": [(1, 2)],
-                },
-            },
-            "stop": {
-                "tags": ["stop"],
-                "attributes": {
-                    "name": [""],
-                    "parameter": [""],
-                    "command": ["stop"],
-                    "wordlen": [(1, 2)],
-                },
-            },
+            
             "cut": {
                 "tags": ["cut"],
                 "attributes": {
@@ -232,6 +212,54 @@ class Commands:
                     "wordlen": [(2, 3), (3, 4)],
                 },
             },
+            "breakpoint": {
+                "tags": ["breakpoint", "breakpoints"],
+                "attributes": {
+                    "name": ["add", "delete all", "remove all", "delete", "remove", "toggle", "disable all","enable all"],
+                    "parameter": ["number", "", "", "number", "number", "", "", ""],
+                    "command": ["breakpoint_add", "breakpoint_remove_all", "breakpoint_remove_all", "breakpoint_remove","breakpoint_remove", "breakpoint_toggle", "breakpoint_disable_all", "breakpoint_enable_all"],
+                    "wordlen": [(3, 7), (3,4), (3,4),  (3, 7),(3, 7), (2, 2), (3,4), (3,4)],
+                },
+            },
+            "format": {
+                "tags": ["format"],
+                "attributes": {
+                    "name": ["selection", "selected", ""],
+                    "parameter": ["", "", ""],
+                    "command": ["format_selection", "format_selection", "format_document"],
+                    "wordlen": [(2, 3), (2, 3), (1, 3)],
+                },
+            },
+            "compare": {
+                "tags": ["compare"],
+                "attributes": {
+                    "name": ["clipboard", "copied", ""],
+                    "parameter": ["", "", ""],
+                    "command": ["compare_clipboard", "compare_clipboard", "compare_file"],
+                    "wordlen": [(2, 4), (2, 4), (1, 3)],
+                },
+            },
+            # general commands created for continue and stop while debugging but may be used as other context-aware commands;
+            # make sure to keep this below the original command as it should have lower priority as 
+            # previous exact command may match completely
+            "conitnue": {
+                "tags": ["continue"],
+                "attributes": {
+                    "name": [""],
+                    "parameter": [""],
+                    "command": ["continue"],
+                    "wordlen": [(1, 2)],
+                },
+            },
+            "stop": {
+                "tags": ["stop"],
+                "attributes": {
+                    "name": [""],
+                    "parameter": [""],
+                    "command": ["stop"],
+                    "wordlen": [(1, 2)],
+                },
+            },
         }
         self.original = ""
         self.transcript = ""
@@ -298,7 +326,7 @@ class Commands:
             for tag in tags:
                 index = self.subfinder(self.transcript, tag.split())
                 if index > -1:
-                    self.transcript = self.transcript[index:]
+                    self.transcript = self.transcript
                     return self.commanKeyDict[key].get("attributes")
 
         return None

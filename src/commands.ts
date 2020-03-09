@@ -180,4 +180,29 @@ export default [
     command: "update_extension",
     exec: "workbench.extensions.action.updateAllExtensions"
   },
+  {
+    command: "compare_file",
+    exec: "workbench.files.action.compareFileWith"
+  },
+  {
+    command: "compare_clipboard",
+    exec: "workbench.files.action.compareWithClipboard"
+  },
+  {
+    command: "breakpoint_toggle",
+    exec: "editor.debug.action.toggleBreakpoint"
+  },
+  {
+    command: "breakpoint_remove_all",
+    exec: "workbench.debug.viewlet.action.removeAllBreakpoints"
+  },
+  {
+    command: "breakpoint_enable_all",
+    exec: "workbench.debug.viewlet.action.enableAllBreakpoints"
+  },
+  {
+    command: "breakpoint_disable_all",
+    exec: "workbench.debug.viewlet.action.disableAllBreakpoints"
+  },
+  
 ];
