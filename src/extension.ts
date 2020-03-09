@@ -4,7 +4,6 @@ import { join } from "path";
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
-const fs = require("fs");
 import COMMANDS from "./commands";
 var MAP = new Map();
 // var HashMap = require("hashmap");
@@ -22,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
   // Temporary blank command used to activate the extension through the command palette
   let disposable = vscode.commands.registerCommand(
     "extension.activateSpeak",
-    () => { }
+    () => {}
   );
 
   context.subscriptions.push(disposable);
@@ -80,7 +79,9 @@ class CommandRunner {
               const text = activeTextEditor.document.getText(
                 activeTextEditor.selection
               );
-              vscode.env.openExternal(vscode.Uri.parse("https://www.google.com/search?q=" + text));
+              vscode.env.openExternal(
+                vscode.Uri.parse("https://www.google.com/search?q=" + text)
+              );
             }
             break;
           case "navigate_line":
@@ -148,12 +149,13 @@ class CommandRunner {
               const currentFileName = activeTextEditor.document.fileName;
               const activeTerminal = vscode.window.activeTerminal;
               if (activeTerminal) {
-                if (activeTextEditor.document.languageId === 'python') {
+                if (activeTextEditor.document.languageId === "python") {
                   // TODO: implement functionality for other languages
                   activeTerminal.sendText("python " + currentFileName);
-                }
-                else {
-                  vscode.window.showErrorMessage("Oops! Unsupported language for run commapnd");
+                } else {
+                  vscode.window.showErrorMessage(
+                    "Oops! Unsupported language for run commapnd"
+                  );
                 }
               }
             }
@@ -173,4 +175,4 @@ function print(data: any) {
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() { }
+export function deactivate() {}
