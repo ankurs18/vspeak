@@ -204,5 +204,16 @@ export default [
     command: "breakpoint_disable_all",
     exec: "workbench.debug.viewlet.action.disableAllBreakpoints"
   },
-  
+  {
+    command: "new_file",
+    exec: "workbench.action.files.newUntitledFile"
+  },
+  {
+    command: "select_icon_theme",
+    exec: "workbench.action.selectIconTheme"
+  },
+  {
+    command: "select_theme",
+    exec: "workbench.action.selectTheme"
+  }
 ];

@@ -12,9 +12,19 @@ class Commands:
             "open": {
                 "tags": ["open"],
                 "attributes": {
-                    "name": ["file", "folder", "workspace", "terminal", "settings", "new window", ""],
-                    "parameter": ["", "", "", "", "", "", ""],
+                    "name": [
+                        "new file",
+                        "file",
+                        "folder",
+                        "workspace",
+                        "terminal",
+                        "settings",
+                        "new window",
+                        "",
+                    ],
+                    "parameter": ["", "", "", "", "", "", "", ""],
                     "command": [
+                        "new_file",
                         "open_file",
                         "open_file",  # we execute the same command on the vscode side for folder/file, so send the same command from here too
                         "open_workspace",
@@ -23,7 +33,16 @@ class Commands:
                         "open_window",
                         "open_file",
                     ],
-                    "wordlen": [(2, 3), (2, 3), (2, 3), (2, 3), (2, 3), (3, 4), (1, 1)],
+                    "wordlen": [
+                        (3, 4),
+                        (2, 3),
+                        (2, 3),
+                        (2, 3),
+                        (2, 3),
+                        (2, 3),
+                        (3, 4),
+                        (1, 1),
+                    ],
                 },
             },
             "run": {
@@ -65,9 +84,9 @@ class Commands:
                         "search_workspace",
                         "search_workspace",
                         "search_google",
-                        "search"
+                        "search",
                     ],
-                    "wordlen": [(2, 4), (2, 4), (2, 3), (2, 2), (1,2)],
+                    "wordlen": [(2, 4), (2, 4), (2, 3), (2, 2), (1, 2)],
                 },
             },
             "next": {
@@ -106,8 +125,9 @@ class Commands:
                         "files to the left",
                         "file to the left",
                         "window",
+                        "file",
                     ],
-                    "parameter": ["", "", "", "", "", ""],
+                    "parameter": ["", "", "", "", "", "", ""],
                     "command": [
                         "close_current_file",
                         "close_current_file",
@@ -117,6 +137,7 @@ class Commands:
                         "close_to_the_left",
                         "close_to_the_left",
                         "close_window",
+                        "close_current_file",
                     ],
                     "wordlen": [
                         (3, 4),
@@ -127,10 +148,10 @@ class Commands:
                         (3, 6),
                         (3, 6),
                         (2, 3),
+                        (2, 2),
                     ],
                 },
             },
-            
             "cut": {
                 "tags": ["cut"],
                 "attributes": {
@@ -161,9 +182,19 @@ class Commands:
             "show": {
                 "tags": ["show"],
                 "attributes": {
-                    "name": ["all commands", "context menu", "next change", "previous change"],
+                    "name": [
+                        "all commands",
+                        "context menu",
+                        "next change",
+                        "previous change",
+                    ],
                     "parameter": ["", "", "", ""],
-                    "command": ["show_commands", "show_contextMenu", "show_nextChange", "show_previousChange"],
+                    "command": [
+                        "show_commands",
+                        "show_contextMenu",
+                        "show_nextChange",
+                        "show_previousChange",
+                    ],
                     "wordlen": [(3, 4), (3, 4), (3, 4), (3, 4)],
                 },
             },
@@ -182,7 +213,7 @@ class Commands:
                     "name": ["as", "all", ""],
                     "parameter": ["", "", ""],
                     "command": ["save_as", "save_all", "save"],
-                    "wordlen": [(2, 2), (2, 3), (1,2)],
+                    "wordlen": [(2, 2), (2, 3), (1, 2)],
                 },
             },
             "scroll": {
@@ -199,7 +230,12 @@ class Commands:
                 "attributes": {
                     "name": ["line", "lines", "selection", ""],
                     "parameter": ["", "", "", ""],
-                    "command": ["toggle_comment", "toggle_comment", "toggle_comment", "toggle_comment"],
+                    "command": [
+                        "toggle_comment",
+                        "toggle_comment",
+                        "toggle_comment",
+                        "toggle_comment",
+                    ],
                     "wordlen": [(2, 3), (2, 3), (2, 3), (1, 1)],
                 },
             },
@@ -215,10 +251,37 @@ class Commands:
             "breakpoint": {
                 "tags": ["breakpoint", "breakpoints"],
                 "attributes": {
-                    "name": ["add", "delete all", "remove all", "delete", "remove", "toggle", "disable all","enable all"],
+                    "name": [
+                        "add",
+                        "delete all",
+                        "remove all",
+                        "delete",
+                        "remove",
+                        "toggle",
+                        "disable all",
+                        "enable all",
+                    ],
                     "parameter": ["number", "", "", "number", "number", "", "", ""],
-                    "command": ["breakpoint_add", "breakpoint_remove_all", "breakpoint_remove_all", "breakpoint_remove","breakpoint_remove", "breakpoint_toggle", "breakpoint_disable_all", "breakpoint_enable_all"],
-                    "wordlen": [(3, 7), (3,4), (3,4),  (3, 7),(3, 7), (2, 2), (3,4), (3,4)],
+                    "command": [
+                        "breakpoint_add",
+                        "breakpoint_remove_all",
+                        "breakpoint_remove_all",
+                        "breakpoint_remove",
+                        "breakpoint_remove",
+                        "breakpoint_toggle",
+                        "breakpoint_disable_all",
+                        "breakpoint_enable_all",
+                    ],
+                    "wordlen": [
+                        (3, 7),
+                        (3, 4),
+                        (3, 4),
+                        (3, 7),
+                        (3, 7),
+                        (2, 2),
+                        (3, 4),
+                        (3, 4),
+                    ],
                 },
             },
             "format": {
@@ -226,7 +289,11 @@ class Commands:
                 "attributes": {
                     "name": ["selection", "selected", ""],
                     "parameter": ["", "", ""],
-                    "command": ["format_selection", "format_selection", "format_document"],
+                    "command": [
+                        "format_selection",
+                        "format_selection",
+                        "format_document",
+                    ],
                     "wordlen": [(2, 3), (2, 3), (1, 3)],
                 },
             },
@@ -235,12 +302,16 @@ class Commands:
                 "attributes": {
                     "name": ["clipboard", "copied", ""],
                     "parameter": ["", "", ""],
-                    "command": ["compare_clipboard", "compare_clipboard", "compare_file"],
+                    "command": [
+                        "compare_clipboard",
+                        "compare_clipboard",
+                        "compare_file",
+                    ],
                     "wordlen": [(2, 4), (2, 4), (1, 3)],
                 },
             },
             # general commands created for continue and stop while debugging but may be used as other context-aware commands;
-            # make sure to keep this below the original command as it should have lower priority as 
+            # make sure to keep this below the original command as it should have lower priority as
             # previous exact command may match completely
             "conitnue": {
                 "tags": ["continue"],
@@ -258,6 +329,36 @@ class Commands:
                     "parameter": [""],
                     "command": ["stop"],
                     "wordlen": [(1, 2)],
+                },
+            },
+            "theme": {
+                "tags": ["icon", "theme"],
+                "attributes": {
+                    "name": ["icon theme", ""],
+                    "parameter": ["", ""],
+                    "command": ["select_icon_theme", "select_theme"],
+                    "wordlen": [(2, 4), (2, 4)],
+                },
+            },
+            "git": {
+                "tags": ["git", "push", "pull", "revert", "commit", "git reset"],
+                "push": {
+                    "tags": ["push"],
+                    "attributes": {
+                        "name": ["changes", "files", "branch", "change"],
+                        "parameter": ["", "", "", ""],
+                        "command": ["git_push", "git_push", "git_push", "git_push"],
+                        "wordlen": [(2, 4), (2, 4), (2, 4), (2, 4)],
+                    },
+                },
+                "pull": {
+                    "tags": ["pull"],
+                    "attributes": {
+                        "name": ["changes", "files", "branch", "change"],
+                        "parameter": ["", "", "", ""],
+                        "command": ["git_pull", "git_pull", "git_pull", "git_pull"],
+                        "wordlen": [(2, 4), (2, 4), (2, 4), (2, 4)],
+                    },
                 },
             },
         }
@@ -285,10 +386,11 @@ class Commands:
 
         self.transcript = transcript.lower().split()
         self.transcriptLength = len(self.transcript)
-        attributes = self.getCommandKeyAttributes()
+        attributes = self.getCommandKeyAttributes(None)
         response = "fallback"
         command = transcript
         paramValue = ""
+        # print(attributes)
         if attributes is not None:
             idx = -1
             names = attributes.get("name")
@@ -317,14 +419,26 @@ class Commands:
         return
         # return {"response": response, "command": command, "parameter": paramValue}
 
-    def getCommandKeyAttributes(self):
-        commandKeys = self.commanKeyDict.keys()
+    def getCommandKeyAttributes(self, subcommand):
+
+        commandKeys = (
+            list(subcommand.keys())
+            if subcommand is not None
+            else list(self.commanKeyDict.keys())
+        )
+        commandObj = subcommand if subcommand is not None else self.commanKeyDict
+        l2 = ["tags"]
+        commandKeys = [x for x in commandKeys if x not in l2]
         for key in commandKeys:
-            tags = self.commanKeyDict[key].get("tags")
+            tags = commandObj[key].get("tags")
             for tag in tags:
                 index = self.subfinder(self.transcript, tag.split())
                 if index > -1:
-                    return self.commanKeyDict[key].get("attributes")
+                    # self.transcript = self.transcript[index:]
+                    if commandObj[key].get("attributes") is not None:
+                        return commandObj[key].get("attributes")
+                    else:
+                        return self.getCommandKeyAttributes(commandObj[key])
 
         return None
 
@@ -335,10 +449,10 @@ class Commands:
         return -1
 
 
-def main():
-    commandObj = Commands()
-    commandObj.getCommand("stop")
+# def main():
+#     commandObj = Commands()
+#     commandObj.getCommand("pull the branch")
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
