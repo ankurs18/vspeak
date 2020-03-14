@@ -211,5 +211,70 @@ export default [
   {
     command: "select_theme",
     exec: "workbench.action.selectTheme"
+  },
+  //GIT
+  {
+    command: "git_init",
+    exec: "git.init"
+  },
+  {
+    command: "git_clone",
+    exec: "git.clone"
+  },
+  {
+    command: "git_branch",
+    exec: "git.branch"
+  },
+  {
+    command: "git_branch_rename",
+    exec: "git.renameBranch"
+  },
+  {
+    command: "git_branch_delete",
+    exec: "git.deleteBranch"
+  },
+  {
+    command: "git_push",
+    exec: "git.push"
+  },
+  {
+    command: "git_pull",
+    exec: "git.pull"
+  },
+  {
+    command: "git_stage",
+    exec: "git.stage"
+  },
+  {
+    command: "git_stage_change",
+    exec: "git.stageChange"
+  },
+  {
+    command: "git_stage_all",
+    exec: "git.stageAll"
+  },
+  {
+    command: "git_stage_all_tracked",
+    exec: "git.stageAllTracked"
+  },
+  {
+    command: "git_stage_all_untracked",
+    exec: "git.stageAllUntracked"
+  },
+  {
+    command: "git_commit",
+    exec: "git.commit"
+  },
+  {
+    command: "git_reset",
+    exec: "git.unstage"
+  },
+  {
+    command: "git_reset_all",
+    exec: "git.unstageAll"
+  },
+  {
+    command: "git_diff",
+    exec: "git.timeline.openDiff"
   }
 ];

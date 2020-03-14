@@ -76,10 +76,9 @@ class CommandRunner {
         switch (commandWords[0]) {
           case "continue":
             if (vscode.debug.activeDebugSession) {
-              print('Context aware continue while in debug');
+              print("Context aware continue while in debug");
               vscode.commands.executeCommand("workbench.action.debug.continue");
-            }
-            else {
+            } else {
               print('Falling back as no context found for "continue"');
             }
             break;
@@ -87,8 +86,7 @@ class CommandRunner {
             if (vscode.debug.activeDebugSession) {
               print('Context aware "stop" while in debug');
               vscode.commands.executeCommand("workbench.action.debug.stop");
-            }
-            else {
+            } else {
               print('Falling back as no context found for "stop"');
             }
             break;
@@ -126,8 +124,13 @@ class CommandRunner {
             activeTextEditor = vscode.window.activeTextEditor;
             if (activeTextEditor) {
               let position = new vscode.Position(lineNumber - 1, 0);
-              let location = new vscode.Location(activeTextEditor.document.uri, position);
-              let breakpointToAdd = [new vscode.SourceBreakpoint(location, true)];
+              let location = new vscode.Location(
+                activeTextEditor.document.uri,
+                position
+              );
+              let breakpointToAdd = [
+                new vscode.SourceBreakpoint(location, true)
+              ];
               vscode.debug.addBreakpoints(breakpointToAdd);
             }
             break;
@@ -137,9 +140,12 @@ class CommandRunner {
             if (activeTextEditor) {
               let existingBreakPoints = vscode.debug.breakpoints;
               for (let breakpoint of existingBreakPoints) {
-                if (breakpoint instanceof vscode.SourceBreakpoint &&
-                  breakpoint.location.uri.path === activeTextEditor.document.uri.path
-                  && breakpoint.location.range.start.line === lineNumber - 1) {
+                if (
+                  breakpoint instanceof vscode.SourceBreakpoint &&
+                  breakpoint.location.uri.path ===
+                    activeTextEditor.document.uri.path &&
+                  breakpoint.location.range.start.line === lineNumber - 1
+                ) {
                   vscode.debug.removeBreakpoints([breakpoint]);
                 }
               }
@@ -197,6 +203,15 @@ class CommandRunner {
             break;
           case "copy_file":
             // TODO: implement functionality
+            break;
+          case "git_status":
+            const activeTerminal = vscode.window.activeTerminal;
+            if (
+              activeTerminal &&
+              vscode.extensions.getExtension("vscode.git")
+            ) {
+              activeTerminal.sendText("git status");
+            }
             break;
         }
       }
