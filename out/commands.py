@@ -101,16 +101,17 @@ class Commands:
             "go": {
                 "tags": ["go to", "goto", "navigate to", "move to"],
                 "attributes": {
-                    "name": ["line", "definition", "class", "file", "terminal"],
-                    "parameter": ["number", "", "string", "", ""],
+                    "name": ["line", "definition", "class", "file", "terminal", "editor"],
+                    "parameter": ["number", "", "string", "", "", ""],
                     "command": [
                         "navigate_line",
                         "navigate_definition",
                         "navigate_class",
                         "navigate_file",
                         "navigate_terminal",
+                        "navigate_editor"
                     ],
-                    "wordlen": [(4, 7), (3, 5), (3, 6), (2, 4), (2, 3)],
+                    "wordlen": [(4, 7), (3, 5), (3, 6), (2, 5), (2, 5), (2, 5)],
                 },
             },
             "close": {

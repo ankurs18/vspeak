@@ -29,6 +29,10 @@ export default [
     exec: "workbench.action.terminal.focus"
   },
   {
+    command: "navigate_editor",
+    exec: "workbench.action.focusActiveEditorGroup"
+  },
+  {
     command: "open_terminal",
     exec: "workbench.action.terminal.new"
   },
