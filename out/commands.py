@@ -342,23 +342,185 @@ class Commands:
                 },
             },
             "git": {
-                "tags": ["git", "push", "pull", "revert", "commit", "git reset"],
-                "push": {
-                    "tags": ["push"],
+                "tags": [
+                    "git",
+                    "push",
+                    "pull",
+                    "revert",
+                    "commit",
+                    "git reset",
+                    "git add",
+                    "unstage",
+                    "branch",
+                    "branches",
+                    "stage",
+                    "clone",
+                ],
+                "init": {
+                    "tags": ["git init", "init", "git new"],
                     "attributes": {
-                        "name": ["changes", "files", "branch", "change"],
-                        "parameter": ["", "", "", ""],
-                        "command": ["git_push", "git_push", "git_push", "git_push"],
-                        "wordlen": [(2, 4), (2, 4), (2, 4), (2, 4)],
+                        "name": [""],
+                        "parameter": [""],
+                        "command": ["git_init"],
+                        "wordlen": [(2, 3)],
+                    },
+                },
+                "clone": {
+                    "tags": ["git clone"],
+                    "attributes": {
+                        "name": [""],
+                        "parameter": [""],
+                        "command": ["git_clone"],
+                        "wordlen": [(2, 3)],
+                    },
+                },
+                "diff": {
+                    "tags": ["git diff", "git difference"],
+                    "attributes": {
+                        "name": ["", ""],
+                        "parameter": ["", ""],
+                        "command": ["git_diff", "git_diff"],
+                        "wordlen": [(2, 3), (2, 3)],
+                    },
+                },
+                "push": {
+                    "tags": ["git push", "push"],
+                    "attributes": {
+                        "name": ["changes", "files", "branch", "change", "file", ""],
+                        "parameter": ["", "", "", "", "", ""],
+                        "command": [
+                            "git_push",
+                            "git_push",
+                            "git_push",
+                            "git_push",
+                            "git_push",
+                            "git_push",
+                        ],
+                        "wordlen": [(2, 4), (2, 4), (2, 4), (2, 4), (2, 4), (2, 3)],
+                    },
+                },
+                "status": {
+                    "tags": ["git status", "status"],
+                    "attributes": {
+                        "name": [""],
+                        "parameter": [""],
+                        "command": ["git_status"],
+                        "wordlen": [(2, 3)],
                     },
                 },
                 "pull": {
-                    "tags": ["pull"],
+                    "tags": ["git pull", "pull"],
                     "attributes": {
-                        "name": ["changes", "files", "branch", "change"],
-                        "parameter": ["", "", "", ""],
-                        "command": ["git_pull", "git_pull", "git_pull", "git_pull"],
-                        "wordlen": [(2, 4), (2, 4), (2, 4), (2, 4)],
+                        "name": ["changes", "files", "branch", "change", "file", ""],
+                        "parameter": ["", "", "", "", "", ""],
+                        "command": [
+                            "git_pull",
+                            "git_pull",
+                            "git_pull",
+                            "git_pull",
+                            "git_pull",
+                            "git_pull",
+                        ],
+                        "wordlen": [(2, 4), (2, 4), (2, 4), (2, 4), (2, 4), (2, 3)],
+                    },
+                },
+                "reset": {
+                    "tags": ["git reset", "reset", "unstage"],
+                    "attributes": {
+                        "name": [
+                            "changes",
+                            "files",
+                            "change",
+                            "file",
+                            "all",
+                            "everything",
+                            "",
+                        ],
+                        "parameter": ["", "", "", "", "", "", ""],
+                        "command": [
+                            "git_reset",
+                            "git_reset",
+                            "git_reset",
+                            "git_reset",
+                            "git_reset_all",
+                            "git_reset_all",
+                            "git_reset",
+                        ],
+                        "wordlen": [
+                            (2, 4),
+                            (2, 4),
+                            (2, 4),
+                            (2, 4),
+                            (3, 4),
+                            (2, 3),
+                            (2, 3),
+                        ],
+                    },
+                },
+                "add": {
+                    "tags": ["git add", "add", "stage"],
+                    "attributes": {
+                        "name": [
+                            "changes",
+                            "files",
+                            "change",
+                            "file",
+                            "all",
+                            "everything",
+                            "tracked",
+                            "untracked",
+                            "",
+                        ],
+                        "parameter": ["", "", "", "", "", "", "", "", ""],
+                        "command": [
+                            "git_stage_change",
+                            "git_stage",
+                            "git_stage_change",
+                            "git_stage_all",
+                            "git_stage_all",
+                            "git_stage_all_tracked",
+                            "git_stage_all_untracked",
+                            "git_stage",
+                        ],
+                        "wordlen": [
+                            (2, 4),
+                            (2, 4),
+                            (2, 4),
+                            (2, 4),
+                            (3, 4),
+                            (3, 5),
+                            (3, 5),
+                            (2, 3),
+                        ],
+                    },
+                },
+                "commit": {
+                    "tags": ["git commit", "commit"],
+                    "attributes": {
+                        "name": ["changes", "files", "change", "file", ""],
+                        "parameter": ["", "", "", "", "", ""],
+                        "command": [
+                            "git_commit",
+                            "git_commit",
+                            "git_commit",
+                            "git_commit",
+                            "git_commit",
+                            "git_commit",
+                        ],
+                        "wordlen": [(2, 4), (2, 4), (2, 4), (2, 4), (2, 3)],
+                    },
+                },
+                "branch": {
+                    "tags": ["git branch", "branch", "branches"],
+                    "attributes": {
+                        "name": ["delete", "rename", ""],
+                        "parameter": ["", "", ""],
+                        "command": [
+                            "git_branch_delete",
+                            "git_branch_rename",
+                            "git_branch",
+                        ],
+                        "wordlen": [(2, 3), (2, 3), (2, 3)],
                     },
                 },
             },
@@ -452,7 +614,7 @@ class Commands:
 
 # def main():
 #     commandObj = Commands()
-#     commandObj.getCommand("pull the branch")
+#     commandObj.getCommand("git diff")
 
 
 # if __name__ == "__main__":
