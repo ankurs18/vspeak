@@ -10,8 +10,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld",
-		"onCommand:extension.activateSpeak"
+		"onCommand:extension.activateSpeak",
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
