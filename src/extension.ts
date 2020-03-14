@@ -69,6 +69,7 @@ class CommandRunner {
 
     // added vscode.window.state.focused because commands should only run when vs code window is in the foreground
     if (status && vscode.window.state.focused) {
+      vscode.window.setStatusBarMessage("Vspeak Success!");
       const commandWords = words.slice(1);
       if (MAP.has(commandWords[0])) {
         vscode.commands.executeCommand(MAP.get(commandWords[0]));
@@ -109,6 +110,7 @@ class CommandRunner {
             }
             break;
           case "navigate_line":
+            vscode.commands.executeCommand("workbench.action.focusActiveEditorGroup");
             lineNumber = parseInt(commandWords[1]);
             activeTextEditor = vscode.window.activeTextEditor;
             if (activeTextEditor) {
@@ -122,6 +124,7 @@ class CommandRunner {
             }
             break;
           case "breakpoint_add":
+            vscode.commands.executeCommand("workbench.action.focusActiveEditorGroup");
             lineNumber = parseInt(commandWords[1]);
             activeTextEditor = vscode.window.activeTextEditor;
             if (activeTextEditor) {
@@ -132,6 +135,7 @@ class CommandRunner {
             }
             break;
           case "breakpoint_remove":
+            vscode.commands.executeCommand("workbench.action.focusActiveEditorGroup");
             lineNumber = parseInt(commandWords[1]);
             activeTextEditor = vscode.window.activeTextEditor;
             if (activeTextEditor) {
@@ -145,9 +149,6 @@ class CommandRunner {
               }
             }
             break;
-          // case "navigate_definition":
-          //   vscode.commands.executeCommand("editor.action.revealDefinition");
-          //   break;
           // case "navigate_file":
           //   vscode.commands.executeCommand("workbench.action.quickOpen");
           //   vscode.window.showQuickPick();
@@ -200,6 +201,9 @@ class CommandRunner {
             break;
         }
       }
+    }
+    else{
+      vscode.window.setStatusBarMessage("Vspeak recognition Failure ("+ words.slice(1) +")");
     }
   }
 }
