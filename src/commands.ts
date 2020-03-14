@@ -89,6 +89,18 @@ export default [
     exec: "workbench.action.debug.stop"
   },
   {
+    command: "step_over",
+    exec: "workbench.action.debug.stepOver"
+  },
+  {
+    command: "step_into",
+    exec: "workbench.action.debug.stepInto"
+  },
+  {
+    command: "step_out",
+    exec: "workbench.action.debug.stepOut"
+  },
+  {
     command: "cut",
     exec: "editor.action.clipboardCutAction"
   },

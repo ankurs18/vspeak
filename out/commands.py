@@ -74,6 +74,19 @@ class Commands:
                     "wordlen": [(2, 5), (2, 2), (2, 4), (2, 4), (2, 4), (1, 3)],
                 },
             },
+            "step": {
+                "tags": ["step"],
+                "attributes": {
+                    "name": ["over", "into", "out"],
+                    "parameter": ["", "", ""],
+                    "command": [
+                        "step_over",
+                        "step_into",
+                        "step_out"
+                    ],
+                    "wordlen": [(2, 3), (2, 3), (2, 3)],
+                },
+            },
             "search": {
                 "tags": ["search", "find"],
                 "attributes": {
