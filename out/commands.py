@@ -75,16 +75,12 @@ class Commands:
                 },
             },
             "step": {
-                "tags": ["step"],
+                "tags": ["step", "stepover"],
                 "attributes": {
-                    "name": ["over", "into", "out"],
+                    "name": ["over", "into", "out", "stepover"],
                     "parameter": ["", "", ""],
-                    "command": [
-                        "step_over",
-                        "step_into",
-                        "step_out"
-                    ],
-                    "wordlen": [(2, 3), (2, 3), (2, 3)],
+                    "command": ["step_over", "step_into", "step_out", "step_out"],
+                    "wordlen": [(2, 3), (2, 3), (2, 3), (1, 2)],
                 },
             },
             "search": {
@@ -114,7 +110,14 @@ class Commands:
             "go": {
                 "tags": ["go to", "goto", "navigate to", "move to"],
                 "attributes": {
-                    "name": ["line", "definition", "class", "file", "terminal", "editor"],
+                    "name": [
+                        "line",
+                        "definition",
+                        "class",
+                        "file",
+                        "terminal",
+                        "editor",
+                    ],
                     "parameter": ["number", "", "string", "", "", ""],
                     "command": [
                         "navigate_line",
@@ -122,7 +125,7 @@ class Commands:
                         "navigate_class",
                         "navigate_file",
                         "navigate_terminal",
-                        "navigate_editor"
+                        "navigate_editor",
                     ],
                     "wordlen": [(4, 7), (3, 5), (3, 6), (2, 5), (2, 5), (2, 5)],
                 },
@@ -138,10 +141,17 @@ class Commands:
                         "file to the right",
                         "files to the left",
                         "file to the left",
+                        "editors to the right",
+                        "editor to the right",
+                        "editors to the left",
+                        "editor to the left",
                         "window",
                         "file",
+                        "editor",
+                        "others",
+                        "other"
                     ],
-                    "parameter": ["", "", "", "", "", "", ""],
+                    "parameter": ["", "", "", "", "", "", "","", "", "", "", "", "","", "", ""],
                     "command": [
                         "close_current_file",
                         "close_current_file",
@@ -150,8 +160,15 @@ class Commands:
                         "close_to_the_right",
                         "close_to_the_left",
                         "close_to_the_left",
+                        "close_to_the_right",
+                        "close_to_the_right",
+                        "close_to_the_left",
+                        "close_to_the_left",
                         "close_window",
                         "close_current_file",
+                        "close_current_file",
+                        "close_other",
+                        "close_other"
                     ],
                     "wordlen": [
                         (3, 4),
@@ -161,8 +178,15 @@ class Commands:
                         (3, 6),
                         (3, 6),
                         (3, 6),
+                        (3, 6),
+                        (3, 6),
+                        (3, 6),
+                        (3, 6),
                         (2, 3),
                         (2, 2),
+                        (2, 2),
+                        (2, 4),
+                        (2, 4),
                     ],
                 },
             },
@@ -627,7 +651,7 @@ class Commands:
 
 # def main():
 #     commandObj = Commands()
-#     commandObj.getCommand("git diff")
+#     commandObj.getCommand("close window")
 
 
 # if __name__ == "__main__":

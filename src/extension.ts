@@ -19,15 +19,21 @@ var MAP = new Map();
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "extension" is now active!');
 
+  new SpeechListener(context);
   // Temporary blank command used to activate the extension through the command palette
-  let disposable = commands.registerCommand(
-    "extension.activateSpeak",
-    () => {}
-  );
+  let disposable = commands.registerCommand("extension.activateVSpeak", () => {
+    commands.executeCommand("start_listen");
+    vscode.window.showInformationMessage("VSpeak is activated");
+  });
 
   context.subscriptions.push(disposable);
-  new SpeechListener(context);
 
+  context.subscriptions.push(
+    vscode.commands.registerCommand("extension.deactivateVSpeak", () => {
+      commands.executeCommand("stop_listen");
+      vscode.window.showInformationMessage("VSpeak is deactivated");
+    })
+  );
   for (var i = 0; i < COMMANDS.length; i++) {
     var item = COMMANDS[i];
     MAP.set(COMMANDS[i].command, COMMANDS[i].exec);
@@ -42,8 +48,8 @@ class SpeechListener {
   constructor(context: vscode.ExtensionContext) {
     this.execFile = spawn;
     this.sttbar = new SttBarItem();
-    const d1 = commands.registerCommand('toggle', () => {
-      if (this.sttbar.getSttText() === 'on') {
+    const d1 = commands.registerCommand("toggle", () => {
+      if (this.sttbar.getSttText() === "on") {
         this.sttbar.off();
         this.killed();
       } else {
@@ -51,18 +57,22 @@ class SpeechListener {
         this.run();
       }
     });
-    const d2 = commands.registerCommand('stop_listen', () => {
-      this.sttbar.off();;
+    const d2 = commands.registerCommand("stop_listen", () => {
+      this.sttbar.off();
       this.killed();
     });
-    context.subscriptions.concat([d1, d2]);
-    this.sttbar.setSttCmd('toggle');
+    const d3 = commands.registerCommand("start_listen", () => {
+      this.sttbar.on();
+      this.run();
+    });
+    context.subscriptions.concat([d1, d2, d3]);
+    this.sttbar.setSttCmd("toggle");
   }
 
   run() {
     print("Trying to run speech detection");
     this.child = this.execFile("python3", [
-      join(__dirname, "tts.py")
+      join(__dirname, "tts.py"),
     ]).on("error", (error: any) => print(error));
     this.child.stdout.on("data", (data: Buffer) => {
       //print(data);
@@ -83,21 +93,24 @@ class SttBarItem {
   private statusText: string;
 
   constructor() {
-    this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+    this.statusBarItem = vscode.window.createStatusBarItem(
+      vscode.StatusBarAlignment.Left,
+      10
+    );
     this.statusText = "off";
     this.off();
   }
 
   on() {
-    this.statusBarItem.text = 'VSpeak listening!';
+    this.statusBarItem.text = "VSpeak listening!";
     this.statusBarItem.show();
-    this.statusText = 'on';
+    this.statusText = "on";
   }
 
   off() {
-    this.statusBarItem.text = 'VSpeak off 🤐';
+    this.statusBarItem.text = "VSpeak off 🤐";
     this.statusBarItem.show();
-    this.statusText = 'off';
+    this.statusText = "off";
   }
 
   getSttText() {
@@ -121,7 +134,7 @@ class CommandRunner {
 
     // added vscode.window.state.focused because commands should only run when vs code window is in the foreground
     if (status && vscode.window.state.focused) {
-      vscode.window.setStatusBarMessage("Success!");
+      vscode.window.setStatusBarMessage("Success!", 3000);
       const commandWords = words.slice(1);
       if (MAP.has(commandWords[0])) {
         commands.executeCommand(MAP.get(commandWords[0]));
@@ -129,10 +142,9 @@ class CommandRunner {
         switch (commandWords[0]) {
           case "continue":
             if (vscode.debug.activeDebugSession) {
-              print('Context aware continue while in debug');
+              print("Context aware continue while in debug");
               commands.executeCommand("workbench.action.debug.continue");
-            }
-            else {
+            } else {
               print('Falling back as no context found for "continue"');
             }
             break;
@@ -140,8 +152,7 @@ class CommandRunner {
             if (vscode.debug.activeDebugSession) {
               print('Context aware "stop" while in debug');
               commands.executeCommand("workbench.action.debug.stop");
-            }
-            else {
+            } else {
               print('Falling back as no context found for "stop"');
             }
             break;
@@ -186,7 +197,7 @@ class CommandRunner {
                 position
               );
               let breakpointToAdd = [
-                new vscode.SourceBreakpoint(location, true)
+                new vscode.SourceBreakpoint(location, true),
               ];
               vscode.debug.addBreakpoints(breakpointToAdd);
             }
@@ -270,9 +281,13 @@ class CommandRunner {
             break;
         }
       }
-    }
-    else{
-      vscode.window.setStatusBarMessage("Recognition Failure ("+ receivedString.substr(receivedString.indexOf(' ')+1) +")");
+    } else {
+      vscode.window.setStatusBarMessage(
+        "Recognition Failure (" +
+          receivedString.substr(receivedString.indexOf(" ") + 1) +
+          ")",
+        3000
+      );
     }
   }
 }
@@ -283,4 +298,6 @@ function print(data: any) {
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() {
+  vscode.window.setStatusBarMessage("");
+}
