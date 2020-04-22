@@ -95,7 +95,7 @@ class Commands:
                         "search_google",
                         "search",
                     ],
-                    "wordlen": [(2, 4), (2, 4), (2, 3), (2, 2), (1, 2)],
+                    "wordlen": [(2, 4), (2, 4), (2, 3), (2, 4), (1, 2)],
                 },
             },
             "next": {
@@ -149,9 +149,26 @@ class Commands:
                         "file",
                         "editor",
                         "others",
-                        "other"
+                        "other",
                     ],
-                    "parameter": ["", "", "", "", "", "", "","", "", "", "", "", "","", "", ""],
+                    "parameter": [
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    ],
                     "command": [
                         "close_current_file",
                         "close_current_file",
@@ -168,7 +185,7 @@ class Commands:
                         "close_current_file",
                         "close_current_file",
                         "close_other",
-                        "close_other"
+                        "close_other",
                     ],
                     "wordlen": [
                         (3, 4),

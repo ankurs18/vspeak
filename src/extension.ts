@@ -145,10 +145,12 @@ class CommandRunner {
               print("Context aware continue while in debug");
               commands.executeCommand("workbench.action.debug.continue");
               vscode.window.setStatusBarMessage("Success!", 3000);
-            }
-            else {
+            } else {
               print('Falling back as no context found for "continue"');
-              vscode.window.setStatusBarMessage("Fallback! (you can call the 'conitnue' command when debugging)", 3000);
+              vscode.window.setStatusBarMessage(
+                "Fallback! (you can call the 'conitnue' command when debugging)",
+                3000
+              );
             }
             break;
           case "stop":
@@ -156,25 +158,36 @@ class CommandRunner {
               print('Context aware "stop" while in debug');
               commands.executeCommand("workbench.action.debug.stop");
               vscode.window.setStatusBarMessage("Success!", 3000);
-            }
-            else {
+            } else {
               print('Falling back as no context found for "stop"');
-              vscode.window.setStatusBarMessage("Fallback! (you can call the 'stop' command when debugging)", 3000);
+              vscode.window.setStatusBarMessage(
+                "Fallback! (you can call the 'stop' command when debugging)",
+                3000
+              );
             }
             break;
           case "search_google":
             activeTextEditor = vscode.window.activeTextEditor;
             if (activeTextEditor) {
-              const text = activeTextEditor.document.getText(
-                activeTextEditor.selection
+              const text = activeTextEditor.document
+                .getText(activeTextEditor.selection)
+                .trim();
+              if (text.length > 0) {
+                vscode.env.openExternal(
+                  vscode.Uri.parse("https://www.google.com/search?q=" + text)
+                );
+                vscode.window.setStatusBarMessage("Success!", 3000);
+              } else {
+                vscode.window.setStatusBarMessage(
+                  "Fallback! (Please select text to perform a google search)",
+                  3000
+                );
+              }
+            } else {
+              vscode.window.setStatusBarMessage(
+                "Fallback! (Please select text in an editor to perform a google search)",
+                3000
               );
-              vscode.env.openExternal(
-                vscode.Uri.parse("https://www.google.com/search?q=" + text)
-              );
-              vscode.window.setStatusBarMessage("Success!", 3000);
-            }
-            else{
-              vscode.window.setStatusBarMessage("Fallback! (Please select text to perform a google search)", 3000);
             }
             break;
           case "navigate_line":
@@ -190,9 +203,11 @@ class CommandRunner {
               );
               activeTextEditor.revealRange(range);
               vscode.window.setStatusBarMessage("Success!", 3000);
-            }
-            else{
-              vscode.window.setStatusBarMessage("Fallback! (There is no active editor open.)", 3000); 
+            } else {
+              vscode.window.setStatusBarMessage(
+                "Fallback! (There is no active editor open.)",
+                3000
+              );
             }
             break;
           case "breakpoint_add":
@@ -209,10 +224,12 @@ class CommandRunner {
                 new vscode.SourceBreakpoint(location, true),
               ];
               vscode.debug.addBreakpoints(breakpointToAdd);
-              vscode.window.setStatusBarMessage("Success!", 3000); 
-            }
-            else{
-              vscode.window.setStatusBarMessage("Fallback! (There is no active editor open.)", 3000); 
+              vscode.window.setStatusBarMessage("Success!", 3000);
+            } else {
+              vscode.window.setStatusBarMessage(
+                "Fallback! (There is no active editor open.)",
+                3000
+              );
             }
             break;
           case "breakpoint_remove":
@@ -231,10 +248,12 @@ class CommandRunner {
                   vscode.debug.removeBreakpoints([breakpoint]);
                 }
               }
-              vscode.window.setStatusBarMessage("Success!", 3000); 
-            }
-            else{
-              vscode.window.setStatusBarMessage("Fallback! (There is no active editor open.)", 3000); 
+              vscode.window.setStatusBarMessage("Success!", 3000);
+            } else {
+              vscode.window.setStatusBarMessage(
+                "Fallback! (There is no active editor open.)",
+                3000
+              );
             }
             break;
           // case "navigate_file":
@@ -260,10 +279,12 @@ class CommandRunner {
                 activeTextEditor.selection
               );
               vscode.env.clipboard.writeText(text);
-              vscode.window.setStatusBarMessage("Success!", 3000); 
-            }
-            else{
-              vscode.window.setStatusBarMessage("Fallback! (We only support copying from an editor)", 3000); 
+              vscode.window.setStatusBarMessage("Success!", 3000);
+            } else {
+              vscode.window.setStatusBarMessage(
+                "Fallback! (We only support copying from an editor)",
+                3000
+              );
             }
             break;
           case "navigate_class":
