@@ -134,31 +134,32 @@ class CommandRunner {
 
     // added vscode.window.state.focused because commands should only run when vs code window is in the foreground
     if (status && vscode.window.state.focused) {
-      vscode.window.setStatusBarMessage("Success!", 3000);
       const commandWords = words.slice(1);
       if (MAP.has(commandWords[0])) {
         commands.executeCommand(MAP.get(commandWords[0]));
+        vscode.window.setStatusBarMessage("Success!", 3000);
       } else {
         switch (commandWords[0]) {
           case "continue":
             if (vscode.debug.activeDebugSession) {
               print("Context aware continue while in debug");
               commands.executeCommand("workbench.action.debug.continue");
-            } else {
+              vscode.window.setStatusBarMessage("Success!", 3000);
+            }
+            else {
               print('Falling back as no context found for "continue"');
+              vscode.window.setStatusBarMessage("Fallback! (you can call the 'conitnue' command when debugging)", 3000);
             }
             break;
           case "stop":
             if (vscode.debug.activeDebugSession) {
               print('Context aware "stop" while in debug');
               commands.executeCommand("workbench.action.debug.stop");
-            } else {
-              print('Falling back as no context found for "stop"');
+              vscode.window.setStatusBarMessage("Success!", 3000);
             }
-            break;
-          case "continue":
-            if (vscode.debug.activeDebugSession) {
-              commands.executeCommand("workbench.action.debug.continue");
+            else {
+              print('Falling back as no context found for "stop"');
+              vscode.window.setStatusBarMessage("Fallback! (you can call the 'stop' command when debugging)", 3000);
             }
             break;
           case "search_google":
@@ -170,6 +171,10 @@ class CommandRunner {
               vscode.env.openExternal(
                 vscode.Uri.parse("https://www.google.com/search?q=" + text)
               );
+              vscode.window.setStatusBarMessage("Success!", 3000);
+            }
+            else{
+              vscode.window.setStatusBarMessage("Fallback! (Please select text to perform a google search)", 3000);
             }
             break;
           case "navigate_line":
@@ -184,6 +189,10 @@ class CommandRunner {
                 range.start
               );
               activeTextEditor.revealRange(range);
+              vscode.window.setStatusBarMessage("Success!", 3000);
+            }
+            else{
+              vscode.window.setStatusBarMessage("Fallback! (There is no active editor open.)", 3000); 
             }
             break;
           case "breakpoint_add":
@@ -200,6 +209,10 @@ class CommandRunner {
                 new vscode.SourceBreakpoint(location, true),
               ];
               vscode.debug.addBreakpoints(breakpointToAdd);
+              vscode.window.setStatusBarMessage("Success!", 3000); 
+            }
+            else{
+              vscode.window.setStatusBarMessage("Fallback! (There is no active editor open.)", 3000); 
             }
             break;
           case "breakpoint_remove":
@@ -218,6 +231,10 @@ class CommandRunner {
                   vscode.debug.removeBreakpoints([breakpoint]);
                 }
               }
+              vscode.window.setStatusBarMessage("Success!", 3000); 
+            }
+            else{
+              vscode.window.setStatusBarMessage("Fallback! (There is no active editor open.)", 3000); 
             }
             break;
           // case "navigate_file":
@@ -243,29 +260,15 @@ class CommandRunner {
                 activeTextEditor.selection
               );
               vscode.env.clipboard.writeText(text);
+              vscode.window.setStatusBarMessage("Success!", 3000); 
+            }
+            else{
+              vscode.window.setStatusBarMessage("Fallback! (We only support copying from an editor)", 3000); 
             }
             break;
           case "navigate_class":
             let className = commandWords[1];
             // TODO: implement functionality
-            break;
-          case "run_file":
-            activeTextEditor = vscode.window.activeTextEditor;
-            if (activeTextEditor) {
-              activeTextEditor.document.save(); //should probably save all files
-              const currentFileName = activeTextEditor.document.fileName;
-              const activeTerminal = vscode.window.activeTerminal;
-              if (activeTerminal) {
-                if (activeTextEditor.document.languageId === "python") {
-                  // TODO: implement functionality for other languages
-                  activeTerminal.sendText("python " + currentFileName);
-                } else {
-                  vscode.window.showErrorMessage(
-                    "Oops! Unsupported language for run commapnd"
-                  );
-                }
-              }
-            }
             break;
           case "copy_file":
             // TODO: implement functionality
